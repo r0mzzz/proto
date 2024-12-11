@@ -2,7 +2,6 @@ package com.example.proto
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
@@ -16,7 +15,6 @@ class MainActivity : BaseActivity() {
     private lateinit var navHost: NavHostFragment
     private lateinit var navController: NavController
     private lateinit var graph: NavGraph
-    private lateinit var mainViewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = FragmentMainActivityBinding.inflate(LayoutInflater.from(this)).also {

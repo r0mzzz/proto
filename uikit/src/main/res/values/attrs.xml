@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <declare-styleable name="MyToolbar">
+        <attr name="toolbar_title" format="string" />
+        <attr name="toolbar_right_action_icon" format="reference" />
+        <attr name="toolbar_left_action_icon" format="reference" />
+        <attr name="toolbar_option" format="enum">
+            <enum name="with_left_and_right" value="0" />
+            <enum name="with_left" value="1" />
+            <enum name="with_right" value="2" />
+            <enum name="without_left_and_right" value="3" />
+        </attr>
+        <attr name="android:textStyle" tools:ignore="ResourceName" />
+    </declare-styleable>
+</resources>

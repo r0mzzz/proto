@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.core.base.BaseFragment
 import com.example.core.tools.NavigationCommand
 import com.example.home.databinding.FragmentHomePageBinding
@@ -28,7 +29,10 @@ class HomePageFragment : BaseFragment<FragmentHomePageBinding, HomePageViewModel
     private fun initViews() {
 
         binding.apply {
-            text.text = "6666"
+            toolbar.setToolBarRightActionClick {
+                Toast.makeText(requireContext(), "dsfdsfsdf", Toast.LENGTH_SHORT).show()
+            }
+            toolbar.setTitle("HomePage")
             navBtn.setOnClickListener {
                 viewmodel.navigate(
                     NavigationCommand.Deeplink(

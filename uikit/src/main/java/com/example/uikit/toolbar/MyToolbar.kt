@@ -1,21 +1,14 @@
 package com.example.uikit.toolbar
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.Toolbar
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.FrameLayout
 import androidx.compose.material.icons.Icons
 import com.example.uikit.R
 import com.example.uikit.databinding.MyToolbarBinding
 import com.example.uikit.toolbar.extensions.gone
 import com.example.uikit.toolbar.extensions.show
-import com.google.android.material.appbar.MaterialToolbar
-import java.lang.Integer.getInteger
 
 enum class ToolbarOption(val value: Int) {
     WITH_LEFT_AND_RIGHT(0), WITH_LEFT(1), WITH_RIGHT(2), WITHOUT_LEFT_AND_RIGHT(3)
@@ -24,7 +17,8 @@ enum class ToolbarOption(val value: Int) {
 class MyToolbar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-) : MaterialToolbar(context, attrs) {
+    defStyleAttr: Int = 0
+) : FrameLayout(context, attrs) {
     val appIcons = Icons.Rounded
     private var toolbarLeftActionClick: (() -> Unit)? = null
     private var toolbarRightActionClick: (() -> Unit)? = null
@@ -39,26 +33,31 @@ class MyToolbar @JvmOverloads constructor(
         )
 
     init {
-        context.obtainStyledAttributes(
-            attrs,
-            R.styleable.MyToolbar,
-        ).apply {
-            try {
-                toolbarOption = getInteger(
-                    R.styleable.MyToolbar_toolbar_option,
-                    ToolbarOption.WITH_LEFT_AND_RIGHT.value
-                )
-            } finally {
-                recycle()
+        if (!isInEditMode) {
+            tag = "toolbar"
+            context.obtainStyledAttributes(
+                attrs,
+                R.styleable.MyToolbar,
+                defStyleAttr,
+                R.style.MyToolbarStyle
+            ).apply {
+                try {
+                    toolbarOption = getInteger(
+                        R.styleable.MyToolbar_toolbar_option,
+                        ToolbarOption.WITH_LEFT_AND_RIGHT.value
+                    )
+                } finally {
+                    recycle()
+                }
             }
-        }
-        setToolbarOptions()
-        Log.i("sdfsdfsdf", toolbarOption.toString())
-        with(binding) {
-            backBtn.setOnClickListener {
-                toolbarLeftActionClick?.invoke()
-                    ?: (context as? AppCompatActivity)?.onBackPressedDispatcher?.onBackPressed()
-
+            setToolbarOptions()
+            with(binding) {
+                rightActionBtn.setOnClickListener {
+                    toolbarRightActionClick?.invoke()
+                }
+                backBtn.setOnClickListener {
+                    toolbarLeftActionClick?.invoke()
+                }
             }
         }
     }
@@ -96,7 +95,7 @@ class MyToolbar @JvmOverloads constructor(
     }
 
     fun setToolBarRightActionClick(actionClick: () -> Unit) {
-        toolbarLeftActionClick = actionClick
+        toolbarRightActionClick = actionClick
     }
 
     fun setTitle(title: String) {

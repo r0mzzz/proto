@@ -15,6 +15,13 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViews()
+    }
+
+    private fun initViews() {
+        with(binding) {
+            toolbar.setTitle("Settings")
+        }
     }
 
 }

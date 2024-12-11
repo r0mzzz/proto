@@ -12,4 +12,7 @@
         </attr>
         <attr name="android:textStyle" tools:ignore="ResourceName" />
     </declare-styleable>
+
+    <style name="MyToolbarStyle" />
+
 </resources>

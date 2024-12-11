@@ -1,4 +1,6 @@
 package com.example.proto.viewmodel
 
-class MainViewModel {
+import com.example.core.base.BaseViewModel
+
+class MainViewModel: BaseViewModel() {
 }

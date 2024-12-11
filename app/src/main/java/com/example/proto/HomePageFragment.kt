@@ -1,23 +1,19 @@
 package com.example.proto
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.example.core.base.BaseFragment
+import com.example.core.tools.NavigationCommand
 import com.example.proto.databinding.FragmentHomePageBinding
+import com.example.proto.viewmodel.MainViewModel
 
-class HomePageFragment : BaseFragment<FragmentHomePageBinding>() {
+class HomePageFragment : BaseFragment<FragmentHomePageBinding, MainViewModel>() {
+
+    override fun getViewModelClass(): Class<MainViewModel> = MainViewModel::class.java
     override val bindingCallback: (LayoutInflater, ViewGroup?, Boolean) -> FragmentHomePageBinding
         get() = FragmentHomePageBinding::inflate
-
-
-    override val bindViews: FragmentHomePageBinding.() -> Unit =
-        {}
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +30,13 @@ class HomePageFragment : BaseFragment<FragmentHomePageBinding>() {
         binding.apply {
             text.text = "6666"
             navBtn.setOnClickListener {
-                findNavController().navigate(Uri.parse("com.example://settings"))
+                viewmodel.navigate(
+                    NavigationCommand.Deeplink(
+                        "com.example://settings",
+                        null,
+                        false
+                    )
+                )
             }
         }
     }

@@ -5,6 +5,7 @@
     android:id="@+id/main_graph"
     app:startDestination="@id/homePageFragment">
 
+    <include app:graph="@navigation/settings_graph" />
     <fragment
         android:id="@+id/homePageFragment"
         android:name="com.example.proto.HomePageFragment"

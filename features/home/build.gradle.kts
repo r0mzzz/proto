@@ -36,7 +36,10 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":uikit"))
+    implementation(project(":domain"))
+    implementation(project(":features:moviedetails"))
     implementation(libs.androidx.core.ktx)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)

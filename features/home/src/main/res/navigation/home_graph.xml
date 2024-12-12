@@ -4,6 +4,8 @@
     android:id="@+id/home_graph"
     app:startDestination="@id/homePageFragment">
 
+    <include app:graph="@navigation/movie_graph" />
+
     <fragment
         android:id="@+id/homePageFragment"
         android:name="com.example.home.view.HomePageFragment"

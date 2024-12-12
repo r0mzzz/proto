@@ -1,4 +1,4 @@
-package com.example.uikit.toolbar.extensions
+package com.example.uikit.extensions
 
 import android.view.View
 

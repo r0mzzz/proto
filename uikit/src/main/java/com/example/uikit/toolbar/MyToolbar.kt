@@ -7,8 +7,8 @@ import android.widget.FrameLayout
 import androidx.compose.material.icons.Icons
 import com.example.uikit.R
 import com.example.uikit.databinding.MyToolbarBinding
-import com.example.uikit.toolbar.extensions.gone
-import com.example.uikit.toolbar.extensions.show
+import com.example.uikit.extensions.gone
+import com.example.uikit.extensions.show
 
 enum class ToolbarOption(val value: Int) {
     WITH_LEFT_AND_RIGHT(0), WITH_LEFT(1), WITH_RIGHT(2), WITHOUT_LEFT_AND_RIGHT(3)

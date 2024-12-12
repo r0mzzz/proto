@@ -2,6 +2,7 @@ package com.example.proto
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
@@ -16,6 +17,7 @@ class MainActivity : BaseActivity() {
     private lateinit var navController: NavController
     private lateinit var graph: NavGraph
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         mainBinding = FragmentMainActivityBinding.inflate(LayoutInflater.from(this)).also {
             setContentView(it.root)

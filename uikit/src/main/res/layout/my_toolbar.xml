@@ -26,6 +26,7 @@
             tools:visibility="visible" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/title"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
@@ -49,7 +50,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

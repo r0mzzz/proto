@@ -6,9 +6,10 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.proto.databinding.FragmentMainActivityBinding
-import com.example.proto.viewmodel.MainViewModel
 import com.example.core.base.BaseActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : BaseActivity() {
@@ -16,6 +17,8 @@ class MainActivity : BaseActivity() {
     private lateinit var navHost: NavHostFragment
     private lateinit var navController: NavController
     private lateinit var graph: NavGraph
+    lateinit var bottomNav: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -25,12 +28,15 @@ class MainActivity : BaseActivity() {
         setStartGraph(savedInstanceState)
     }
 
+
     private fun setStartGraph(savedInstanceState: Bundle?) {
         navHost =
             supportFragmentManager.findFragmentById(R.id.main_layout) as NavHostFragment?
                 ?: return
         navController = navHost.navController
+        bottomNav = findViewById(R.id.bottomNav)!!
         if (savedInstanceState == null) {
+            setupWithNavController(mainBinding.bottomNav, navController)
             graph = navHost.navController.navInflater.inflate(R.navigation.main_graph)
             val (startGraphId, startGraphArgs) = findStartGraph()
             graph.setStartDestination(startGraphId)
@@ -48,7 +54,7 @@ class MainActivity : BaseActivity() {
 
     private fun findStartGraph(): FindStartGraphResult {
         return FindStartGraphResult(
-            graphId = R.id.main_layout,
+            graphId = R.id.homePageFragment,
             args = null,
         )
     }

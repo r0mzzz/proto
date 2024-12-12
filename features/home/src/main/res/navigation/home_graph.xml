@@ -9,5 +9,7 @@
     <fragment
         android:id="@+id/homePageFragment"
         android:name="com.example.home.view.HomePageFragment"
-        android:label="HomePageFragment" />
+        android:label="HomePageFragment">
+        <deepLink app:uri="com.example://home" />
+    </fragment>
 </navigation>

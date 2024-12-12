@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/homePageFragment"
-        android:icon="@drawable/ic_notification"
-        android:title="Home" />
-
+        android:id="@+id/home_graph"
+        android:icon="@drawable/ic_home"
+        android:title="Home"
+        app:showAsAction="ifRoom"
+        android:visible="true" />
     <item
-        android:id="@+id/settingsFragment"
-        android:icon="@drawable/ic_notification"
-        android:title="Settings" />
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_search"
+        android:title="Search"
+        app:showAsAction="ifRoom"
+        android:visible="true" />
+    <item
+        android:id="@+id/comingSoonFragment"
+        android:icon="@drawable/ic_coming_soon"
+        android:visible="true"
+        app:showAsAction="ifRoom"
+        android:title="Coming soon" />
+    <item
+        android:id="@+id/downloadsFragment"
+        android:icon="@drawable/ic_downloads"
+        android:visible="true"
+        app:showAsAction="ifRoom"
+        android:title="Downloads" />
+    <item
+        android:id="@+id/moreFragment"
+        android:visible="true"
+        android:icon="@drawable/ic_more"
+        app:showAsAction="ifRoom"
+        android:title="More" />
 </menu>

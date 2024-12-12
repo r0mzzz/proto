@@ -19,14 +19,19 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
+        app:itemTextColor="@color/navigation_item_text_color"
+        app:itemIconTint="@color/navigation_item_text_color"
+        android:layoutAnimation="@null"
         android:layout_width="match_parent"
+        app:labelVisibilityMode="labeled"
+        app:itemTextAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:itemTextAppearanceActive="@style/TextAppearance.AppCompat.Caption"
+        app:itemTextAppearanceInactive="@style/TextAppearance.AppCompat.Caption"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
-        android:scrollIndicators="left"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/nav_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>

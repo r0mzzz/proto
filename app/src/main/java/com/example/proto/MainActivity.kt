@@ -2,6 +2,7 @@ package com.example.proto
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
@@ -32,7 +33,8 @@ class MainActivity : BaseActivity() {
 
     private fun setStartGraph(savedInstanceState: Bundle?) {
         navHost =
-            supportFragmentManager.findFragmentById(R.id.main_nav_fragment) as NavHostFragment? ?: return
+            supportFragmentManager.findFragmentById(R.id.main_nav_fragment) as NavHostFragment?
+                ?: return
         navController = navHost.navController
         bottomNav = findViewById(R.id.bottomNav)
         setupWithNavController(navigationBarView = bottomNav, navController = navController)
@@ -54,5 +56,20 @@ class MainActivity : BaseActivity() {
             graphId = R.id.homePageFragment,
             args = null,
         )
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.home_graph -> {
+                // Pop the back stack up to the home fragment
+                navController.popBackStack(
+                    R.id.home_graph,
+                    false
+                ) // Don't remove the home fragment from the back stack
+                return true
+            }
+
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 }

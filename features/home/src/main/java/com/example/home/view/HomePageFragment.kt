@@ -50,7 +50,7 @@ class HomePageFragment : BaseFragment<FragmentHomePageBinding, HomePageViewModel
                     NavigationCommand.Deeplink(
                         "com.example://movieDetails",
                         null,
-                        false
+                        true
                     )
                 )
             })

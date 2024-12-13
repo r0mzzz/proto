@@ -6,6 +6,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.core.base.BaseActivity
 import com.example.proto.databinding.FragmentMainActivityBinding
@@ -30,7 +31,7 @@ class MainActivity : BaseActivity() {
 
     private fun setStartGraph(savedInstanceState: Bundle?) {
         navHost =
-            supportFragmentManager.findFragmentById(R.id.main_layout) as NavHostFragment? ?: return
+            supportFragmentManager.findFragmentById(R.id.main_nav_fragment) as NavHostFragment? ?: return
         navController = navHost.navController
         bottomNav = findViewById(R.id.bottomNav)
         setupWithNavController(navigationBarView = bottomNav, navController = navController)

@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/poster"
-        android:layout_width="150dp"
-        android:layout_height="215dp"
+        android:layout_width="110dp"
+        android:layout_height="160dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:src="@drawable/movie_poster"

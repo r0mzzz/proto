@@ -1,6 +1,5 @@
 package com.example.home.view
 
-import android.graphics.Movie
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,10 +20,6 @@ class HomePageFragment : BaseFragment<FragmentHomePageBinding, HomePageViewModel
     private lateinit var movieListAdapter: MovieListAdapter
     private var movieList = emptyList<MovieItemModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
@@ -36,15 +31,6 @@ class HomePageFragment : BaseFragment<FragmentHomePageBinding, HomePageViewModel
                 Toast.makeText(requireContext(), "dsfdsfsdf", Toast.LENGTH_SHORT).show()
             }
             toolbar.setTitle("HomePage")
-            navBtn.setOnClickListener {
-                viewmodel.navigate(
-                    NavigationCommand.Deeplink(
-                        "com.example://settings",
-                        null,
-                        false
-                    )
-                )
-            }
         }
         initMovieListAdapter()
     }

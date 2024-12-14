@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.core.base.BaseFragment
 import com.example.moviedetails.databinding.FragmentMovieDetailsBinding
+import com.example.moviedetails.effect.MovieDetailsPageEffect
+import com.example.moviedetails.state.MovieDetailsPageState
 import com.example.moviedetails.viewmodel.MovieDetailsViewModel
 
-class MovieDetailsFragment : BaseFragment<FragmentMovieDetailsBinding, MovieDetailsViewModel>() {
+class MovieDetailsFragment :
+    BaseFragment<MovieDetailsPageState, MovieDetailsPageEffect, FragmentMovieDetailsBinding, MovieDetailsViewModel>() {
 
     override val bindingCallback: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMovieDetailsBinding
         get() = FragmentMovieDetailsBinding::inflate

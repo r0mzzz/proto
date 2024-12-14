@@ -10,9 +10,11 @@ import com.example.core.tools.NavigationCommand
 import com.example.domain.entity.home.MovieItemModel
 import com.example.home.adapter.MovieListAdapter
 import com.example.home.databinding.FragmentHomePageBinding
+import com.example.home.effect.HomePageEffect
+import com.example.home.state.HomePageState
 import com.example.home.viewmodel.HomePageViewModel
 
-class HomePageFragment : BaseFragment<FragmentHomePageBinding, HomePageViewModel>() {
+class HomePageFragment : BaseFragment<HomePageState, HomePageEffect, FragmentHomePageBinding, HomePageViewModel>() {
 
     override fun getViewModelClass(): Class<HomePageViewModel> = HomePageViewModel::class.java
     override val bindingCallback: (LayoutInflater, ViewGroup?, Boolean) -> FragmentHomePageBinding

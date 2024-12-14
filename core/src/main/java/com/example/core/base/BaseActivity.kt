@@ -8,12 +8,12 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onNewIntent(intent)
 
         supportFragmentManager.fragments.forEach { fragment ->
-            if (fragment is BaseFragment<*, *>) {
+            if (fragment is BaseFragment<*, *, *, *>) {
                 fragment.onNewIntent(intent)
             }
 
             fragment.childFragmentManager.fragments.forEach { childFragment ->
-                if (childFragment is BaseFragment<*, *>) {
+                if (childFragment is BaseFragment<*, *, *, *>) {
                     childFragment.onNewIntent(intent)
                 }
             }

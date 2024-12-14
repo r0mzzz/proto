@@ -14,7 +14,8 @@ import androidx.viewbinding.ViewBinding
 import com.example.core.extensions.deeplinkNavigate
 import com.example.core.tools.NavigationCommand
 
-abstract class BaseFragment<VB : ViewBinding, ViewModel: BaseViewModel> : Fragment() {
+abstract class BaseFragment<State, Effect, VB : ViewBinding, ViewModel : BaseViewModel<State, Effect>> :
+    Fragment() {
 
     private var _binding: VB? = null
     lateinit var binding: VB
@@ -25,10 +26,13 @@ abstract class BaseFragment<VB : ViewBinding, ViewModel: BaseViewModel> : Fragme
     protected open val bindViews: VB.() -> Unit = {}
 
 
-
     private fun init() {
         viewmodel = ViewModelProvider(getViewModelScope() ?: requireActivity())[getViewModelClass()]
     }
+
+    protected open fun observeState(state: State) {}
+
+    protected fun observeEffect(effect: Effect) {}
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,6 +72,7 @@ abstract class BaseFragment<VB : ViewBinding, ViewModel: BaseViewModel> : Fragme
                         )
                     }
                 }
+
                 is NavigationCommand.BackTo -> findNavController().getBackStackEntry(command.destinationId)
                 is NavigationCommand.Back -> findNavController().popBackStack()
                 is NavigationCommand.Deeplink -> findNavController().deeplinkNavigate(

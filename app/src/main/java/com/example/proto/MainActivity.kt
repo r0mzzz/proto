@@ -65,12 +65,10 @@ class MainActivity : BaseActivity() {
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        when (item.itemId) {
 //            R.id.home_graph -> {
-//                Log.d("fgfgfgf", "fgfgfgfg")
-//                // Pop the back stack up to the home fragment
 //                navController.popBackStack(
 //                    R.id.home_graph,
 //                    false
-//                ) // Don't remove the home fragment from the back stack
+//                )
 //                return true
 //            }
 //

@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.uikit"
-    compileSdk = 34
+    compileSdk = 35
     viewBinding {
         enable = true
     }

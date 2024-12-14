@@ -2,20 +2,22 @@ package com.example.proto
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.core.base.BaseActivity
 import com.example.proto.databinding.FragmentMainActivityBinding
+import com.example.proto.viewmodel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
+    private val mainViewModel: MainViewModel by viewModels()
     private lateinit var mainBinding: FragmentMainActivityBinding
     private lateinit var navHost: NavHostFragment
     private lateinit var navController: NavController
@@ -29,6 +31,7 @@ class MainActivity : BaseActivity() {
             setContentView(it.root)
         }
         setStartGraph(savedInstanceState)
+
     }
 
     private fun setStartGraph(savedInstanceState: Bundle?) {
@@ -44,6 +47,7 @@ class MainActivity : BaseActivity() {
             graph.setStartDestination(startGraphId)
             navController.setGraph(graph, startGraphArgs)
         }
+        mainViewModel.getMovies()
     }
 
     data class FindStartGraphResult(
@@ -58,18 +62,19 @@ class MainActivity : BaseActivity() {
         )
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.home_graph -> {
-                // Pop the back stack up to the home fragment
-                navController.popBackStack(
-                    R.id.home_graph,
-                    false
-                ) // Don't remove the home fragment from the back stack
-                return true
-            }
-
-            else -> return super.onOptionsItemSelected(item)
-        }
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//            R.id.home_graph -> {
+//                Log.d("fgfgfgf", "fgfgfgfg")
+//                // Pop the back stack up to the home fragment
+//                navController.popBackStack(
+//                    R.id.home_graph,
+//                    false
+//                ) // Don't remove the home fragment from the back stack
+//                return true
+//            }
+//
+//            else -> return super.onOptionsItemSelected(item)
+//        }
+//    }
 }

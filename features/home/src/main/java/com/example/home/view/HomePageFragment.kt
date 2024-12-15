@@ -17,7 +17,8 @@ import com.example.home.viewmodel.HomePageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomePageFragment : BaseFragment<HomePageState, HomePageEffect, FragmentHomePageBinding, HomePageViewModel>() {
+class HomePageFragment :
+    BaseFragment<HomePageState, HomePageEffect, FragmentHomePageBinding, HomePageViewModel>() {
 
     override fun getViewModelClass(): Class<HomePageViewModel> = HomePageViewModel::class.java
     override val bindingCallback: (LayoutInflater, ViewGroup?, Boolean) -> FragmentHomePageBinding
@@ -64,12 +65,11 @@ class HomePageFragment : BaseFragment<HomePageState, HomePageEffect, FragmentHom
     }
 
     override fun observeState(state: HomePageState) {
-        when(state){
+        when (state) {
             is HomePageState.ErrorOnMovieList -> {
-                Log.d("response", state.error.toString())
             }
+
             is HomePageState.GetMoviesList -> {
-                Log.d("response", state.response.items?.get(0)?.nameOriginal.toString())
             }
         }
     }

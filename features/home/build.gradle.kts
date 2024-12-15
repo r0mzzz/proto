@@ -1,11 +1,14 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
+
 }
 
 android {
     namespace = "com.example.home"
-    compileSdk = 34
+    compileSdk = 35
     viewBinding {
         enable = true
     }
@@ -37,7 +40,11 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":uikit"))
     implementation(project(":domain"))
+    implementation(project(":data"))
     implementation(project(":features:moviedetails"))
+    implementation("com.google.dagger:hilt-android:2.44")
+    // Coroutines
+    kapt("com.google.dagger:hilt-compiler:2.47")
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.appcompat)

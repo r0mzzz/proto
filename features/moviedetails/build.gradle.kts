@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.moviedetails"
-    compileSdk = 34
+    compileSdk = 35
     viewBinding {
         enable = true
     }
@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
+    implementation(libs.hilt.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

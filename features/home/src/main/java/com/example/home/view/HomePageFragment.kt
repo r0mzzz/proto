@@ -1,6 +1,7 @@
 package com.example.home.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,9 @@ import com.example.home.databinding.FragmentHomePageBinding
 import com.example.home.effect.HomePageEffect
 import com.example.home.state.HomePageState
 import com.example.home.viewmodel.HomePageViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomePageFragment : BaseFragment<HomePageState, HomePageEffect, FragmentHomePageBinding, HomePageViewModel>() {
 
     override fun getViewModelClass(): Class<HomePageViewModel> = HomePageViewModel::class.java
@@ -35,6 +38,7 @@ class HomePageFragment : BaseFragment<HomePageState, HomePageEffect, FragmentHom
             toolbar.setTitle("HomePage")
         }
         initMovieListAdapter()
+        viewmodel.getMovies()
     }
 
     private fun initMovieListAdapter() {
@@ -59,4 +63,14 @@ class HomePageFragment : BaseFragment<HomePageState, HomePageEffect, FragmentHom
         binding.movieListAdapter.adapter = movieListAdapter
     }
 
+    override fun observeState(state: HomePageState) {
+        when(state){
+            is HomePageState.ErrorOnMovieList -> {
+                Log.d("response", state.error.toString())
+            }
+            is HomePageState.GetMoviesList -> {
+                Log.d("response", state.response.items?.get(0)?.nameOriginal.toString())
+            }
+        }
+    }
 }

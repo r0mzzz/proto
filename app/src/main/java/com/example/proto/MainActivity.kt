@@ -47,7 +47,6 @@ class MainActivity : BaseActivity() {
             graph.setStartDestination(startGraphId)
             navController.setGraph(graph, startGraphArgs)
         }
-        mainViewModel.getMovies()
     }
 
     data class FindStartGraphResult(

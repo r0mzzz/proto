@@ -1,11 +1,12 @@
-package com.example.proto.di.modules
+package com.example.data.di
 
-import com.example.proto.network.MovieService
+import android.content.Context
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -19,6 +20,12 @@ import javax.inject.Singleton
 class NetworkModule {
     private val API_KEY = "9f093681-2656-4e6f-ac06-6ee5ef514ff9"
     private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
+
+    @Provides
+    @Singleton
+    fun provideContext(@ApplicationContext context: Context): Context {
+        return context
+    }
 
     @Provides
     fun providesOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
@@ -71,10 +78,5 @@ class NetworkModule {
             .client(okHttpClient)
             .addConverterFactory(moshiConverterFactory)
             .build()
-    }
-
-    @Provides
-    fun providesMovieService(retrofit: Retrofit): MovieService {
-        return retrofit.create(MovieService::class.java)
     }
 }

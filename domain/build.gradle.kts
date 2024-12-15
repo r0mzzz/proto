@@ -33,6 +33,8 @@ android {
 }
 
 dependencies {
+    implementation("com.google.dagger:hilt-android:2.44")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

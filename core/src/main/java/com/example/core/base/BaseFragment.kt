@@ -7,12 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.example.core.extensions.deeplinkNavigate
 import com.example.core.tools.NavigationCommand
+import kotlinx.coroutines.launch
 
 abstract class BaseFragment<State, Effect, VB : ViewBinding, ViewModel : BaseViewModel<State, Effect>> :
     Fragment() {
@@ -56,8 +61,14 @@ abstract class BaseFragment<State, Effect, VB : ViewBinding, ViewModel : BaseVie
         }
     }
 
+    protected fun <T> LiveData<T>.observe(block: (T) -> Unit){
+        observe(viewLifecycleOwner, block)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        viewmodel.state.observe(viewLifecycleOwner, ::observeState)
+        viewmodel.effect.observe(viewLifecycleOwner, ::observeEffect)
         viewmodel.navigationCommands.observe(viewLifecycleOwner) { command ->
             when (command) {
                 is NavigationCommand.To -> {

@@ -1,33 +1,42 @@
 package com.example.home.adapter
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.core.base.BaseAdapter
 import com.example.domain.entity.home.MovieItemModel
+import com.example.domain.entity.home.MovieModel
 import com.example.home.databinding.MovieItemBinding
 
-class MovieListAdapter(private val itemList: List<MovieItemModel>, private val clickListener: MovieItemClick) : BaseAdapter<MovieItemModel, MovieListAdapter.MovieListViewHolder>(
-    areItemsTheSame = { oldItem, newItem -> oldItem.poster == newItem.poster }) {
+class MovieListAdapter(
+    private val itemList: List<MovieModel>,
+    private val clickListener: MovieItemClick
+) : BaseAdapter<MovieModel, MovieListAdapter.MovieListViewHolder>(
+    areItemsTheSame = { oldItem, newItem -> oldItem.nameOriginal == newItem.nameOriginal }) {
 
     init {
         submitList(itemList)
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieListViewHolder {
         return MovieListViewHolder(
             MovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
-    class MovieItemClick(val clickListener: (model: MovieItemModel) -> Unit) {
-        fun onClick(model: MovieItemModel) = clickListener(model)
+    class MovieItemClick(val clickListener: (model: MovieModel) -> Unit) {
+        fun onClick(model: MovieModel) = clickListener(model)
     }
 
     class MovieListViewHolder(private val binding: MovieItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(model: MovieItemModel) {
+        fun bind(model: MovieModel) {
             binding.apply {
-                model.poster?.let { poster.setImageResource(it) }
+                Glide.with(binding.poster)
+                    .load(model.posterUrl)
+                    .into(binding.poster)
             }
         }
     }

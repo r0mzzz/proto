@@ -9,6 +9,8 @@ import android.widget.Toast
 import com.example.core.base.BaseFragment
 import com.example.core.tools.NavigationCommand
 import com.example.domain.entity.home.MovieItemModel
+import com.example.domain.entity.home.MovieModel
+import com.example.domain.entity.home.MoviesResponse
 import com.example.home.adapter.MovieListAdapter
 import com.example.home.databinding.FragmentHomePageBinding
 import com.example.home.effect.HomePageEffect
@@ -38,21 +40,12 @@ class HomePageFragment :
             }
             toolbar.setTitle("HomePage")
         }
-        initMovieListAdapter()
         viewmodel.getMovies()
     }
 
-    private fun initMovieListAdapter() {
-        movieList = listOf(
-            MovieItemModel(com.example.uikit.R.drawable.movie_poster),
-            MovieItemModel(),
-            MovieItemModel(),
-            MovieItemModel(),
-            MovieItemModel(),
-            MovieItemModel(),
-        )
+    private fun initMovieListAdapter(response: List<MovieModel>) {
         movieListAdapter =
-            MovieListAdapter(movieList, MovieListAdapter.MovieItemClick {
+            MovieListAdapter(response, MovieListAdapter.MovieItemClick {
                 viewmodel.navigate(
                     NavigationCommand.Deeplink(
                         "com.example://movieDetails",
@@ -70,6 +63,7 @@ class HomePageFragment :
             }
 
             is HomePageState.GetMoviesList -> {
+                state.response.items?.let { initMovieListAdapter(it) }
             }
         }
     }

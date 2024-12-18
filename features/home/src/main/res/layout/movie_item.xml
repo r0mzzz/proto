@@ -8,6 +8,8 @@
 
     <ImageView
         android:id="@+id/poster"
+        android:cropToPadding="false"
+        android:scaleType="fitXY"
         android:layout_width="110dp"
         android:layout_height="160dp"
         app:layout_constraintTop_toTopOf="parent"

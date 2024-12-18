@@ -1,14 +1,13 @@
 package com.example.home.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.core.base.BaseAdapter
-import com.example.domain.entity.home.MovieItemModel
 import com.example.domain.entity.home.MovieModel
 import com.example.home.databinding.MovieItemBinding
+import com.example.uikit.extensions.loadImageFromGLide
+import com.example.uikit.extensions.loadImageFromGLideRounded
 
 class MovieListAdapter(
     private val itemList: List<MovieModel>,
@@ -34,9 +33,7 @@ class MovieListAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(model: MovieModel) {
             binding.apply {
-                Glide.with(binding.poster)
-                    .load(model.posterUrl)
-                    .into(binding.poster)
+                model.posterUrl?.let { binding.poster.loadImageFromGLideRounded(it, 24) }
             }
         }
     }

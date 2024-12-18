@@ -2,10 +2,17 @@ package com.example.proto.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.proto.R
 
+val Roboto = FontFamily(
+    Font(com.example.uikit.R.font.roboto_medium, FontWeight.Bold, FontStyle.Normal),
+    Font(com.example.uikit.R.font.roboto_regular, FontWeight.Normal, FontStyle.Normal),
+)
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(

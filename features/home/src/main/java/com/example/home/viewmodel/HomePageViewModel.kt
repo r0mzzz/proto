@@ -13,6 +13,10 @@ class HomePageViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase
 ): BaseViewModel<HomePageState, HomePageEffect>() {
 
+    init {
+        getMovies()
+    }
+
     fun getMovies(){
         getMoviesUseCase.launch(Unit){
             onSuccess = {

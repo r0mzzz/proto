@@ -56,7 +56,7 @@ class MainActivity : BaseActivity() {
 
     private fun findStartGraph(): FindStartGraphResult {
         return FindStartGraphResult(
-            graphId = R.id.homePageFragment,
+            graphId = R.id.home_graph,
             args = null,
         )
     }

@@ -1,7 +1,13 @@
 package com.example.home.view
 
+import android.animation.ValueAnimator
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,8 +16,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.os.HandlerCompat.postDelayed
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.core.base.BaseFragment
 import com.example.core.tools.NavigationCommand
 import com.example.domain.entity.home.Genre
@@ -23,7 +34,8 @@ import com.example.home.databinding.FragmentHomePageBinding
 import com.example.home.effect.HomePageEffect
 import com.example.home.state.HomePageState
 import com.example.home.viewmodel.HomePageViewModel
-import com.example.uikit.extensions.loadImageFromGLide
+import com.example.uikit.extensions.loadImageFromGlide
+import com.example.uikit.toolbar.MyToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -39,14 +51,70 @@ class HomePageFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        handleToolbarBackgroundOnScroll()
+    }
+
+    private fun handleToolbarBackgroundOnScroll() {
+        val scrollView = binding.scrollbar
+        scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            val maxScroll = scrollView.getChildAt(0).height - scrollView.height
+            val scrollFraction = scrollY.toFloat() / maxScroll
+            if (scrollY == 0) {
+//                resetToolbarColorWithTransition()
+            } else {
+                // Adjust toolbar color based on scroll position (scrollFraction goes from 0 to 1)
+                val toolbarColor = interpolateColor(viewmodel.dominantColor, Color.parseColor("#99000000"), scrollFraction)
+//                setToolbarColorWithTransition(toolbarColor)
+            }
+            // Adjust toolbar color based on scroll position (scrollFraction goes from 0 to 1)
+        }
+    }
+
+    private fun resetToolbarColorWithTransition() {
+        // Reset the toolbar color to the default (transparent)
+        val defaultColor = viewmodel.dominantColor
+        setToolbarColorWithTransition(defaultColor)
+    }
+
+    private fun setToolbarColorWithTransition(color: Int) {
+        // Extract the current color from the toolbar's background (if it's a ColorDrawable)
+        val currentColor =
+            (binding.toolbar.background as? ColorDrawable)?.color ?: Color.TRANSPARENT
+
+        // Animate the color change smoothly
+        val colorAnimator = ValueAnimator.ofArgb(currentColor, color)
+        colorAnimator.duration = 300 // 300ms for a smooth transition
+        colorAnimator.addUpdateListener { animator ->
+            binding.toolbar.setBackgroundColor(animator.animatedValue as Int)
+        }
+        colorAnimator.start()
+    }
+
+    private fun interpolateColor(colorStart: Int, colorEnd: Int, fraction: Float): Int {
+        val startAlpha = (colorStart shr 24) and 0xff
+        val startRed = (colorStart shr 16) and 0xff
+        val startGreen = (colorStart shr 8) and 0xff
+        val startBlue = colorStart and 0xff
+
+        val endAlpha = (colorEnd shr 24) and 0xff
+        val endRed = (colorEnd shr 16) and 0xff
+        val endGreen = (colorEnd shr 8) and 0xff
+        val endBlue = colorEnd and 0xff
+
+        val alpha = (startAlpha + (endAlpha - startAlpha) * fraction).toInt()
+        val red = (startRed + (endRed - startRed) * fraction).toInt()
+        val green = (startGreen + (endGreen - startGreen) * fraction).toInt()
+        val blue = (startBlue + (endBlue - startBlue) * fraction).toInt()
+
+        return Color.argb(alpha, red, green, blue)
     }
 
     private fun initViews() {
         binding.apply {
-            toolbar.setToolBarRightActionClick {
-                Toast.makeText(requireContext(), "dsfdsfsdf", Toast.LENGTH_SHORT).show()
-            }
-            toolbar.setTitle("HomePage")
+//            toolbar.setToolBarRightActionClick {
+//                Toast.makeText(requireContext(), "dsfdsfsdf", Toast.LENGTH_SHORT).show()
+//            }
+//            toolbar.setTitle("HomePage")
         }
     }
 
@@ -68,11 +136,36 @@ class HomePageFragment :
             })
         binding.movieListAdapter.adapter = movieListAdapter
         binding.movieListAdapter.layoutManager = layoutManager
-        updateMovieOfTheDay(response[5])
+        updateMovieOfTheDay(response[6])
     }
 
     private fun updateMovieOfTheDay(movie: MovieModel) {
-        binding.movieOfTheDayPoster.loadImageFromGLide(movie.posterUrl.toString())
+        binding.movieOfTheDayPoster.loadImageFromGlide(
+            movie.posterUrl.toString(),
+            object : RequestListener<Drawable> {
+                override fun onResourceReady(
+                    resource: Drawable,
+                    model: Any,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    postDelayed {
+                        setBackgroundColor()
+                    }
+                    return false
+                }
+
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return false
+                }
+            })
+
         val layoutManager = object : LinearLayoutManager(context, HORIZONTAL, false) {
             override fun canScrollVertically(): Boolean {
                 return false
@@ -82,28 +175,40 @@ class HomePageFragment :
                 return false
             }
         }
+
         val genres = movie.genres?.map { Genre(it.genre) } ?: emptyList()
         val adapter = GenreAdapter(genres)
         binding.genreList.adapter = adapter
         binding.genreList.layoutManager = layoutManager
-        setBackgroundColor()
     }
 
-    private fun setBackgroundColor(){
+    private fun postDelayed(action: () -> Unit) {
+        binding.movieOfTheDayPoster.post {
+            action()
+        }
+    }
+
+    private fun setBackgroundColor() {
         val imageView: ImageView? = binding.root.findViewById(R.id.movie_of_the_day_poster)
-        val layout: ConstraintLayout? = binding.root.findViewById(R.id.homePageFragment)
+        val layout: ImageView? = binding.root.findViewById(R.id.wrapper_background)
+        val toolbar: MyToolbar? = binding.root.findViewById(R.id.toolbar)
         val drawable = imageView?.drawable
         if (drawable is BitmapDrawable) {
             val bitmap: Bitmap = drawable.bitmap
             Palette.from(bitmap).generate { palette ->
-                val dominantColor = palette?.getDominantColor(resources.getColor(com.example.uikit.R.color.black, null))
-                Log.d("dominantColor",dominantColor.toString())
+                val dominantColor = palette?.getDominantColor(
+                    resources.getColor(
+                        com.example.uikit.R.color.black,
+                        null
+                    )
+                )
                 if (dominantColor != null) {
+                    viewmodel.dominantColor = dominantColor
                     layout?.setBackgroundColor(dominantColor)
+//                    toolbar?.setBackgroundColor(dominantColor)
                 }
             }
         }
-
     }
 
 

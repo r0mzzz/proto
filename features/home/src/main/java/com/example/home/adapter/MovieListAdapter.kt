@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.core.base.BaseAdapter
 import com.example.domain.entity.home.MovieModel
 import com.example.home.databinding.MovieItemBinding
-import com.example.uikit.extensions.loadImageFromGLide
 import com.example.uikit.extensions.loadImageFromGLideRounded
 
 class MovieListAdapter(

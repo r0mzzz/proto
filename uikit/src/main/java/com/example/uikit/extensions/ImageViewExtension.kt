@@ -1,11 +1,16 @@
 package com.example.uikit.extensions
 
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestListener
 
-fun ImageView.loadImageFromGLide(imagePath: String) {
-    Glide.with(this).load(imagePath).into(this)
+fun ImageView.loadImageFromGlide(url: String, listener: RequestListener<Drawable>? = null) {
+    Glide.with(this.context)
+        .load(url)
+        .listener(listener)
+        .into(this)
 }
 
 fun ImageView.loadImageFromGLideRounded(imagePath: String, roundValue: Int) {

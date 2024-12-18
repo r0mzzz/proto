@@ -4,32 +4,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_page_fragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black"
-    android:fitsSystemWindows="true"
-    android:paddingBottom="80dp">
+    android:layout_height="match_parent">
 
     <com.example.uikit.toolbar.MyToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:translationZ="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:toolbar_option="without_left_and_right" />
 
-    <ScrollView
-        android:overScrollMode="never"
+    <FrameLayout
+        android:visibility="gone"
+        android:translationZ="10dp"
+        android:id="@+id/toolbar2"
+        android:background="#99000000"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- ScrollView -->
+    <ScrollView
+        android:id="@+id/scrollbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:overScrollMode="never"
+        android:paddingTop="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <!-- Background image -->
+            <ImageView
+                android:id="@+id/wrapper_background"
+                android:layout_width="match_parent"
+                android:layout_height="500dip"
+                android:background="@android:color/transparent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/daily_content"
@@ -39,11 +60,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <!-- Genre list -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/genre_list"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:paddingBottom="20dp"
                     android:translationZ="1dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -52,25 +74,27 @@
                     tools:itemCount="3"
                     tools:listitem="@layout/genre_item" />
 
+                <!-- Movie poster -->
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/movie_of_the_day_poster"
                     android:layout_width="350dip"
                     android:layout_height="500dip"
-                    android:scaleType="fitXY"
                     android:foreground="@drawable/image_stroke_white"
+                    android:scaleType="fitXY"
                     android:src="@drawable/movie_poster"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- Content below the daily content -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="9dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/daily_content">
-
 
                 <TextView
                     android:id="@+id/title"
@@ -84,10 +108,11 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <!-- Movie list -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/movie_list_adapter"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_margin="0dp"
                     android:orientation="horizontal"
                     android:padding="0dp"
@@ -96,6 +121,24 @@
                     app:layout_constraintTop_toBottomOf="@id/title"
                     tools:itemCount="10"
                     tools:listitem="@layout/movie_item" />
+
+                <TextView
+                    android:id="@+id/text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="dsfsdfsdf"
+                    android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/movie_list_adapter" />
+
+                <TextView
+                    android:id="@+id/text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
+                    android:text="dsfsdfsdf"
+                    android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

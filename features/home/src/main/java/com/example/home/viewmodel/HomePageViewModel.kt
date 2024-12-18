@@ -13,6 +13,7 @@ class HomePageViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase
 ): BaseViewModel<HomePageState, HomePageEffect>() {
 
+    var dominantColor: Int = 0
     init {
         getMovies()
     }

@@ -2,6 +2,7 @@ package com.example.proto
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
@@ -26,6 +27,10 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        );
         super.onCreate(savedInstanceState)
         mainBinding = FragmentMainActivityBinding.inflate(LayoutInflater.from(this)).also {
             setContentView(it.root)

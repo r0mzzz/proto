@@ -23,6 +23,7 @@ import com.example.home.databinding.FragmentHomePageBinding
 import com.example.home.effect.HomePageEffect
 import com.example.home.state.HomePageState
 import com.example.home.viewmodel.HomePageViewModel
+import com.example.uikit.extensions.loadImageFromGLide
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -67,10 +68,11 @@ class HomePageFragment :
             })
         binding.movieListAdapter.adapter = movieListAdapter
         binding.movieListAdapter.layoutManager = layoutManager
-        updateMovieOfTheDay(response[0])
+        updateMovieOfTheDay(response[5])
     }
 
     private fun updateMovieOfTheDay(movie: MovieModel) {
+        binding.movieOfTheDayPoster.loadImageFromGLide(movie.posterUrl.toString())
         val layoutManager = object : LinearLayoutManager(context, HORIZONTAL, false) {
             override fun canScrollVertically(): Boolean {
                 return false
@@ -89,9 +91,7 @@ class HomePageFragment :
 
     private fun setBackgroundColor(){
         val imageView: ImageView? = binding.root.findViewById(R.id.movie_of_the_day_poster)
-        val layout: ConstraintLayout? = binding.root.findViewById(R.id.daily_content)
-
-        // Extract dominant color from the image
+        val layout: ConstraintLayout? = binding.root.findViewById(R.id.homePageFragment)
         val drawable = imageView?.drawable
         if (drawable is BitmapDrawable) {
             val bitmap: Bitmap = drawable.bitmap

@@ -18,6 +18,7 @@
         app:toolbar_option="without_left_and_right" />
 
     <ScrollView
+        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -31,7 +32,6 @@
             android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:paddingHorizontal="20dp"
                 android:id="@+id/daily_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,8 +54,8 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/movie_of_the_day_poster"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="350dip"
+                    android:layout_height="500dip"
                     android:scaleType="fitXY"
                     android:foreground="@drawable/image_stroke_white"
                     android:src="@drawable/movie_poster"

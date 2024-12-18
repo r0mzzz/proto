@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":features:moviedetails"))
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.dagger:hilt-android:2.44")
+    implementation(libs.androidx.palette.ktx)
     // Coroutines
     kapt("com.google.dagger:hilt-compiler:2.47")
     implementation(libs.androidx.core.ktx)

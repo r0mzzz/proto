@@ -1,19 +1,22 @@
 package com.example.home.view
 
-import android.R
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.core.base.BaseFragment
 import com.example.core.tools.NavigationCommand
 import com.example.domain.entity.home.Genre
-import com.example.domain.entity.home.MovieItemModel
 import com.example.domain.entity.home.MovieModel
+import com.example.home.R
 import com.example.home.adapter.GenreAdapter
 import com.example.home.adapter.MovieListAdapter
 import com.example.home.databinding.FragmentHomePageBinding
@@ -81,6 +84,26 @@ class HomePageFragment :
         val adapter = GenreAdapter(genres)
         binding.genreList.adapter = adapter
         binding.genreList.layoutManager = layoutManager
+        setBackgroundColor()
+    }
+
+    private fun setBackgroundColor(){
+        val imageView: ImageView? = binding.root.findViewById(R.id.movie_of_the_day_poster)
+        val layout: ConstraintLayout? = binding.root.findViewById(R.id.daily_content)
+
+        // Extract dominant color from the image
+        val drawable = imageView?.drawable
+        if (drawable is BitmapDrawable) {
+            val bitmap: Bitmap = drawable.bitmap
+            Palette.from(bitmap).generate { palette ->
+                val dominantColor = palette?.getDominantColor(resources.getColor(com.example.uikit.R.color.black, null))
+                Log.d("dominantColor",dominantColor.toString())
+                if (dominantColor != null) {
+                    layout?.setBackgroundColor(dominantColor)
+                }
+            }
+        }
+
     }
 
 

@@ -11,9 +11,24 @@ class GetMoviesUseCase @Inject constructor(
     context: CoroutineContext,
     convertor: ErrorConvertor,
     private val movieRepository: MovieRepository
-) : BaseUseCase<Unit, MoviesResponse>(context, convertor) {
+) : BaseUseCase<GetMoviesUseCase.Params, MoviesResponse>(context, convertor) {
 
-    override suspend fun executeOnBackground(params: Unit): MoviesResponse {
-        return movieRepository.getMovies()
+    override suspend fun executeOnBackground(params: Params): MoviesResponse {
+        return movieRepository.getMovies(
+            params.type,
+            params.ratingFrom,
+            params.yearTo,
+            params.yearFrom,
+            params.yearTo
+        )
     }
+
+    class Params(
+        val type: String? = null,
+        val yearTo: String? = null,
+        val yearFrom: String? = null,
+        val ratingFrom: String? = null,
+        val ratingTo: String? = null
+    )
+
 }

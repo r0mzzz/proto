@@ -81,6 +81,7 @@
 
 
                     <Button
+                        android:inputType="text"
                         android:id="@+id/play_btn"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -94,6 +95,7 @@
                         app:layout_constraintWidth_percent="0.45" />
 
                     <Button
+                        android:inputType="text"
                         android:id="@+id/list_btn"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

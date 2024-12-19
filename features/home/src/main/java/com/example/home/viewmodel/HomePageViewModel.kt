@@ -11,15 +11,30 @@ import javax.inject.Inject
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase
-): BaseViewModel<HomePageState, HomePageEffect>() {
+) : BaseViewModel<HomePageState, HomePageEffect>() {
 
     var dominantColor: Int = 0
+
     init {
-        getMovies()
+        getMovies(null, "2023")
     }
 
-    fun getMovies(){
-        getMoviesUseCase.launch(Unit){
+    private fun getMovies(
+        type: String? = null,
+        yearFrom: String? = null,
+        yearTo: String? = null,
+        ratingFrom: String? = null,
+        ratingTo: String? = null
+    ) {
+        getMoviesUseCase.launch(
+            GetMoviesUseCase.Params(
+                type,
+                yearFrom,
+                yearTo,
+                ratingFrom,
+                ratingTo
+            )
+        ) {
             onSuccess = {
                 postState(state = HomePageState.GetMoviesList(it))
             }

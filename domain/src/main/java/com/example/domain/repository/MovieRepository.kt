@@ -6,5 +6,11 @@ import retrofit2.Response
 import javax.inject.Inject
 
 interface MovieRepository {
-    suspend fun getMovies(): MoviesResponse
+    suspend fun getMovies(
+        type: String? = null,
+        yearFrom: String? = null,
+        yearTo: String? = null,
+        ratingFrom: String? = null,
+        ratingTo: String? = null
+    ): MoviesResponse
 }

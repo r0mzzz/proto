@@ -35,6 +35,7 @@ import com.example.home.databinding.FragmentHomePageBinding
 import com.example.home.effect.HomePageEffect
 import com.example.home.state.HomePageState
 import com.example.home.viewmodel.HomePageViewModel
+import com.example.uikit.extensions.loadImageFromGLideRounded
 import com.example.uikit.extensions.loadImageFromGlide
 import com.example.uikit.toolbar.MyToolbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -137,12 +138,13 @@ class HomePageFragment :
             })
         binding.movieListAdapter.adapter = movieListAdapter
         binding.movieListAdapter.layoutManager = layoutManager
-        updateMovieOfTheDay(response[6])
+        updateMovieOfTheDay(response[18])
     }
 
     private fun updateMovieOfTheDay(movie: MovieModel) {
-        binding.movieOfTheDayPoster.loadImageFromGlide(
+        binding.movieOfTheDayPoster.loadImageFromGLideRounded(
             movie.posterUrl.toString(),
+            24,
             object : RequestListener<Drawable> {
                 override fun onResourceReady(
                     resource: Drawable,

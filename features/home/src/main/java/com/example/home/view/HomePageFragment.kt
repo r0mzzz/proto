@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.HandlerCompat.postDelayed
@@ -60,11 +61,11 @@ class HomePageFragment :
             val maxScroll = scrollView.getChildAt(0).height - scrollView.height
             val scrollFraction = scrollY.toFloat() / maxScroll
             if (scrollY == 0) {
-//                resetToolbarColorWithTransition()
+                resetToolbarColorWithTransition()
             } else {
                 // Adjust toolbar color based on scroll position (scrollFraction goes from 0 to 1)
                 val toolbarColor = interpolateColor(viewmodel.dominantColor, Color.parseColor("#99000000"), scrollFraction)
-//                setToolbarColorWithTransition(toolbarColor)
+                setToolbarColorWithTransition(toolbarColor)
             }
             // Adjust toolbar color based on scroll position (scrollFraction goes from 0 to 1)
         }
@@ -205,7 +206,7 @@ class HomePageFragment :
                 if (dominantColor != null) {
                     viewmodel.dominantColor = dominantColor
                     layout?.setBackgroundColor(dominantColor)
-//                    toolbar?.setBackgroundColor(dominantColor)
+                    toolbar?.setBackgroundColor(dominantColor)
                 }
             }
         }

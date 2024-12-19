@@ -8,35 +8,30 @@
 
     <com.example.uikit.toolbar.MyToolbar
         android:id="@+id/toolbar"
+        android:outlineProvider="none"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:translationZ="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="@android:color/transparent"
+        android:elevation="0dp"
+        android:translationZ="1dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:toolbar_option="without_left_and_right" />
-
-    <FrameLayout
-        android:visibility="gone"
-        android:translationZ="10dp"
-        android:id="@+id/toolbar2"
-        android:background="#99000000"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:toolbar_option="without_left_and_right" />
 
     <!-- ScrollView -->
     <ScrollView
+        android:clipToPadding="false"
+        android:clipChildren="false"
         android:id="@+id/scrollbar"
+        android:background="@color/black"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:overScrollMode="never"
-        android:paddingTop="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -46,7 +41,7 @@
             <ImageView
                 android:id="@+id/wrapper_background"
                 android:layout_width="match_parent"
-                android:layout_height="500dip"
+                android:layout_height="670dp"
                 android:background="@android:color/transparent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -54,6 +49,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/daily_content"
+                android:paddingTop="@dimen/_130sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"

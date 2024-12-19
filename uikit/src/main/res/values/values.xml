@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="dimension" name="gg">
+        <enum name="wrap_content" value="0"/>
+    </attr>
+</resources>

@@ -42,7 +42,7 @@
             <ImageView
                 android:id="@+id/wrapper_background"
                 android:layout_width="match_parent"
-                android:layout_height="670dp"
+                android:layout_height="800dip"
                 android:background="@android:color/transparent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

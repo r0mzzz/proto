@@ -65,7 +65,7 @@ class HomePageFragment :
                 resetToolbarColorWithTransition()
             } else {
                 // Adjust toolbar color based on scroll position (scrollFraction goes from 0 to 1)
-                val toolbarColor = interpolateColor(viewmodel.dominantColor, Color.parseColor("#99000000"), scrollFraction)
+                val toolbarColor = interpolateColor(viewmodel.dominantColor, Color.parseColor("#BE000000"), scrollFraction)
                 setToolbarColorWithTransition(toolbarColor)
             }
             // Adjust toolbar color based on scroll position (scrollFraction goes from 0 to 1)
@@ -138,7 +138,7 @@ class HomePageFragment :
             })
         binding.movieListAdapter.adapter = movieListAdapter
         binding.movieListAdapter.layoutManager = layoutManager
-        updateMovieOfTheDay(response[18])
+        updateMovieOfTheDay(response[2])
     }
 
     private fun updateMovieOfTheDay(movie: MovieModel) {
@@ -196,23 +196,31 @@ class HomePageFragment :
         val layout: ImageView? = binding.root.findViewById(R.id.wrapper_background)
         val toolbar: MyToolbar? = binding.root.findViewById(R.id.toolbar)
         val drawable = imageView?.drawable
+
         if (drawable is BitmapDrawable) {
             val bitmap: Bitmap = drawable.bitmap
             Palette.from(bitmap).generate { palette ->
                 val dominantColor = palette?.getDominantColor(
-                    resources.getColor(
-                        com.example.uikit.R.color.black,
-                        null
-                    )
+                    resources.getColor(com.example.uikit.R.color.black, null)
+                ) ?: resources.getColor(com.example.uikit.R.color.black, null)
+
+                val secondaryColor = palette?.getMutedColor(
+                    resources.getColor(com.example.uikit.R.color.black, null)
+                ) ?: resources.getColor(com.example.uikit.R.color.black, null)
+
+                // Create a gradient drawable with the two colors
+                val gradientDrawable = GradientDrawable(
+                    GradientDrawable.Orientation.TOP_BOTTOM,
+                    intArrayOf(dominantColor, secondaryColor)
                 )
-                if (dominantColor != null) {
-                    viewmodel.dominantColor = dominantColor
-                    layout?.setBackgroundColor(dominantColor)
-                    toolbar?.setBackgroundColor(dominantColor)
-                }
+
+                // Apply gradient to the background
+                layout?.background = gradientDrawable
+                toolbar?.background = gradientDrawable
             }
         }
     }
+
 
 
     override fun observeState(state: HomePageState) {

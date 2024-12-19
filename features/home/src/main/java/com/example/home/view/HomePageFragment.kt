@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -65,7 +66,7 @@ class HomePageFragment :
                 resetToolbarColorWithTransition()
             } else {
                 // Adjust toolbar color based on scroll position (scrollFraction goes from 0 to 1)
-                val toolbarColor = interpolateColor(viewmodel.dominantColor, Color.parseColor("#BE000000"), scrollFraction)
+                val toolbarColor = interpolateColor(viewmodel.dominantColor, Color.parseColor("#99000000"), scrollFraction)
                 setToolbarColorWithTransition(toolbarColor)
             }
             // Adjust toolbar color based on scroll position (scrollFraction goes from 0 to 1)
@@ -208,15 +209,19 @@ class HomePageFragment :
                     resources.getColor(com.example.uikit.R.color.black, null)
                 ) ?: resources.getColor(com.example.uikit.R.color.black, null)
 
-                // Create a gradient drawable with the two colors
                 val gradientDrawable = GradientDrawable(
                     GradientDrawable.Orientation.TOP_BOTTOM,
                     intArrayOf(dominantColor, secondaryColor)
                 )
 
-                // Apply gradient to the background
-                layout?.background = gradientDrawable
-                toolbar?.background = gradientDrawable
+                val fadeGradient = GradientDrawable(
+                    GradientDrawable.Orientation.TOP_BOTTOM, // Top to Bottom gradient
+                    intArrayOf(dominantColor, 0xFF000000.toInt()) // Transparent to Black
+                )
+                fadeGradient.gradientType = GradientDrawable.LINEAR_GRADIENT
+                val layerDrawable = LayerDrawable(arrayOf(drawable, fadeGradient))
+                layerDrawable.setLayerGravity(1, android.view.Gravity.BOTTOM)
+                layout?.background = layerDrawable
             }
         }
     }

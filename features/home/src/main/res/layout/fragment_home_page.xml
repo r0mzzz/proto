@@ -62,8 +62,8 @@
                     android:id="@+id/genre_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="50dp"
                     android:orientation="horizontal"
-                    android:paddingBottom="20dp"
                     android:translationZ="1dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -71,16 +71,53 @@
                     tools:itemCount="3"
                     tools:listitem="@layout/genre_item" />
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:translationZ="1dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/genre_list">
+
+
+                    <Button
+                        android:id="@+id/play_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Смотреть"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/list_btn"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="0.45" />
+
+                    <Button
+                        android:id="@+id/list_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/dark_grey"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Мой список"
+                        android:textColor="@color/white"
+                        app:layout_constraintStart_toEndOf="@id/play_btn"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="0.45" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <!-- Movie poster -->
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    android:cropToPadding="false"
-                    android:outlineProvider="none"
                     android:id="@+id/movie_of_the_day_poster"
                     android:layout_width="350dip"
                     android:layout_height="500dip"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:cropToPadding="false"
                     android:foreground="@drawable/image_stroke_white"
+                    android:outlineProvider="none"
                     android:scaleType="fitXY"
                     android:src="@drawable/movie_poster"
                     app:layout_constraintEnd_toEndOf="parent"

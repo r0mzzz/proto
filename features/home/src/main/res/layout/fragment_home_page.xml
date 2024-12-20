@@ -39,11 +39,10 @@
             android:layout_height="wrap_content">
 
             <!-- Background image -->
-            <ImageView
+            <View
                 android:id="@+id/wrapper_background"
                 android:layout_width="match_parent"
-                android:layout_height="800dip"
-                android:background="@android:color/transparent"
+                android:layout_height="800dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -62,7 +61,7 @@
                     android:id="@+id/genre_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="50dp"
+                    android:layout_marginBottom="70dp"
                     android:orientation="horizontal"
                     android:translationZ="1dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -72,6 +71,7 @@
                     tools:listitem="@layout/genre_item" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_marginHorizontal="@dimen/_16sp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:translationZ="1dp"
@@ -111,10 +111,11 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <!-- Movie poster -->
-                <androidx.appcompat.widget.AppCompatImageView
+                <ImageView
                     android:id="@+id/movie_of_the_day_poster"
-                    android:layout_width="350dip"
-                    android:layout_height="500dip"
+                    android:layout_width="350dp"
+                    android:layout_height="500sp"
+                    android:layout_margin="16sp"
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:cropToPadding="false"
@@ -122,9 +123,10 @@
                     android:outlineProvider="none"
                     android:scaleType="fitXY"
                     android:src="@drawable/movie_poster"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"  />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

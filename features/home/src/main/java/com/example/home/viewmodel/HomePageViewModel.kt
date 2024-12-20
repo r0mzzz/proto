@@ -1,6 +1,7 @@
 package com.example.home.viewmodel
 
 import com.example.core.base.BaseViewModel
+import com.example.domain.entity.enums.MovieType
 import com.example.domain.usecase.movies.GetMoviesUseCase
 import com.example.home.effect.HomePageEffect
 import com.example.home.state.HomePageState
@@ -16,11 +17,11 @@ class HomePageViewModel @Inject constructor(
     var dominantColor: Int = 0
 
     init {
-        getMovies(null, "2023")
+        getMovies(MovieType.FILM, "2023")
     }
 
     private fun getMovies(
-        type: String? = null,
+        type: MovieType? = null,
         yearFrom: String? = null,
         yearTo: String? = null,
         ratingFrom: String? = null,

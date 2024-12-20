@@ -1,6 +1,7 @@
 package com.example.domain.usecase.movies
 
 import com.example.domain.base.BaseUseCase
+import com.example.domain.entity.enums.MovieType
 import com.example.domain.entity.home.MoviesResponse
 import com.example.domain.exceptions.ErrorConvertor
 import com.example.domain.repository.MovieRepository
@@ -16,17 +17,17 @@ class GetMoviesUseCase @Inject constructor(
     override suspend fun executeOnBackground(params: Params): MoviesResponse {
         return movieRepository.getMovies(
             params.type,
-            params.ratingFrom,
-            params.yearTo,
             params.yearFrom,
-            params.yearTo
+            params.yearTo,
+            params.ratingFrom,
+            params.ratingTo
         )
     }
 
     class Params(
-        val type: String? = null,
-        val yearTo: String? = null,
+        val type: MovieType? = null,
         val yearFrom: String? = null,
+        val yearTo: String? = null,
         val ratingFrom: String? = null,
         val ratingTo: String? = null
     )

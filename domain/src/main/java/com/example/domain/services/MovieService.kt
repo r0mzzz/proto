@@ -10,10 +10,10 @@ interface MovieService {
     @GET("films")
     suspend fun getMovies(
         @Query("type") type: MovieType? = null,
-        @Query("ratingFrom") ratingFrom: String? = null,
-        @Query("ratingTo") ratingTo: String? = null,
-        @Query("yearFrom") yearFrom: String? = null,
-        @Query("yearTo") yearTo: String? = null,
+        @Query("yearFrom") ratingFrom: String? = null,
+        @Query("yearTo") ratingTo: String? = null,
+        @Query("ratingFrom") yearFrom: String? = null,
+        @Query("ratingTo") yearTo: String? = null,
     ): MoviesResponse
 }
 

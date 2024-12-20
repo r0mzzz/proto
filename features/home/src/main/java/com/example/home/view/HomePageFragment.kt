@@ -66,7 +66,11 @@ class HomePageFragment :
                 resetToolbarColorWithTransition()
             } else {
                 // Adjust toolbar color based on scroll position (scrollFraction goes from 0 to 1)
-                val toolbarColor = interpolateColor(viewmodel.dominantColor, Color.parseColor("#99000000"), scrollFraction)
+                val toolbarColor = interpolateColor(
+                    viewmodel.dominantColor,
+                    Color.parseColor("#99000000"),
+                    scrollFraction
+                )
                 setToolbarColorWithTransition(toolbarColor)
             }
             // Adjust toolbar color based on scroll position (scrollFraction goes from 0 to 1)
@@ -139,10 +143,11 @@ class HomePageFragment :
             })
         binding.movieListAdapter.adapter = movieListAdapter
         binding.movieListAdapter.layoutManager = layoutManager
-        updateMovieOfTheDay(response[2])
+        updateMovieOfTheDay(response[17])
     }
 
     private fun updateMovieOfTheDay(movie: MovieModel) {
+        Log.d("Glide", movie.posterUrl.toString())
         binding.movieOfTheDayPoster.loadImageFromGLideRounded(
             movie.posterUrl.toString(),
             24,
@@ -180,7 +185,7 @@ class HomePageFragment :
             }
         }
 
-        val genres = movie.genres?.map { Genre(it.genre) } ?: emptyList()
+        val genres = movie.genres?.map { Genre(it.genre) }?.take(3) ?: emptyList()
         val adapter = GenreAdapter(genres)
         binding.genreList.adapter = adapter
         binding.genreList.layoutManager = layoutManager
@@ -194,8 +199,7 @@ class HomePageFragment :
 
     private fun setBackgroundColor() {
         val imageView: ImageView? = binding.root.findViewById(R.id.movie_of_the_day_poster)
-        val layout: ImageView? = binding.root.findViewById(R.id.wrapper_background)
-        val toolbar: MyToolbar? = binding.root.findViewById(R.id.toolbar)
+        val layout: View? = binding.root.findViewById(R.id.wrapper_background)
         val drawable = imageView?.drawable
 
         if (drawable is BitmapDrawable) {
@@ -209,14 +213,13 @@ class HomePageFragment :
                     resources.getColor(com.example.uikit.R.color.black, null)
                 ) ?: resources.getColor(com.example.uikit.R.color.black, null)
 
-                val gradientDrawable = GradientDrawable(
-                    GradientDrawable.Orientation.TOP_BOTTOM,
-                    intArrayOf(dominantColor, secondaryColor)
-                )
-
                 val fadeGradient = GradientDrawable(
-                    GradientDrawable.Orientation.TOP_BOTTOM, // Top to Bottom gradient
-                    intArrayOf(dominantColor, 0xFF000000.toInt()) // Transparent to Black
+                    GradientDrawable.Orientation.TOP_BOTTOM,
+                    intArrayOf(
+                        dominantColor,
+                        secondaryColor,
+                        0xFF000000.toInt()
+                    )
                 )
                 fadeGradient.gradientType = GradientDrawable.LINEAR_GRADIENT
                 val layerDrawable = LayerDrawable(arrayOf(drawable, fadeGradient))
@@ -225,7 +228,6 @@ class HomePageFragment :
             }
         }
     }
-
 
 
     override fun observeState(state: HomePageState) {

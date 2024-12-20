@@ -149,7 +149,6 @@ class HomePageFragment :
             })
         binding.movieListAdapter.adapter = movieListAdapter
         binding.movieListAdapter.layoutManager = layoutManager
-        updateMovieOfTheDay(response[10])
     }
 
     private fun initNewMovieListAdapter(response: List<MovieModel>) {
@@ -261,11 +260,16 @@ class HomePageFragment :
             }
 
             is HomePageState.GetMoviesList -> {
-                state.response.items?.let { initMovieListAdapter(it) }
+                state.response.items?.let {
+                    initMovieListAdapter(it)
+                    updateMovieOfTheDay(state.response.items!![10])
+                }
             }
 
             is HomePageState.GetNewMoviesList -> {
-                state.response.items?.let { initNewMovieListAdapter(it) }
+                state.response.items?.let {
+                    initNewMovieListAdapter(it)
+                }
             }
         }
     }

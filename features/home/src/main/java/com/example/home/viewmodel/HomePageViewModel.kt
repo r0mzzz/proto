@@ -18,7 +18,7 @@ class HomePageViewModel @Inject constructor(
 
     init {
         getMovies(MovieType.FILM, "2023")
-        getNewMovies(MovieType.FILM, "2021", "2022")
+        getNewMovies(MovieType.FILM, "2022", "2023", "7", "10")
     }
 
     private fun getNewMovies(

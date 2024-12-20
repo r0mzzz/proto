@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import com.example.core.base.BaseFragment
+import com.example.domain.entity.moviedetails.MovieDetailsModel
 import com.example.moviedetails.databinding.FragmentMovieDetailsBinding
 import com.example.moviedetails.effect.MovieDetailsPageEffect
 import com.example.moviedetails.state.MovieDetailsPageState
@@ -36,11 +37,22 @@ class MovieDetailsFragment :
     }
 
     private fun initViews() {
-        Log.d("sdfsdfsdf", args.movieId)
         with(binding) {
             toolbar.setTitle("MovieDetails")
         }
         viewmodel.getMovieDetail(args.movieId)
+    }
+
+    private fun updateMovieDetails(response: MovieDetailsModel){
+        binding.movieTitle.text = response.nameEn ?: response.nameRu
+    }
+
+    override fun observeState(state: MovieDetailsPageState) {
+        when (state) {
+            is MovieDetailsPageState.GetMovieDetailSuccess -> {
+                updateMovieDetails(state.response)
+            }
+        }
     }
 
 }

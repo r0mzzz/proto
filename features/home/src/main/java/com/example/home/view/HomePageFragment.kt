@@ -132,13 +132,14 @@ class HomePageFragment :
     }
 
     private fun initMovieListAdapter(response: List<MovieModel>) {
+        viewmodel.movieList = response as ArrayList<MovieModel>
         val layoutManager = object : LinearLayoutManager(context, HORIZONTAL, false) {
             override fun canScrollVertically(): Boolean {
                 return false // Disable vertical scrolling
             }
         }
         movieListAdapter =
-            MovieListAdapter(response, MovieListAdapter.MovieItemClick {
+            MovieListAdapter(viewmodel.movieList, MovieListAdapter.MovieItemClick {
                 viewmodel.navigate(
                     NavigationCommand.Deeplink(
                         "com.example://movieDetails/{movieId}",
@@ -152,13 +153,14 @@ class HomePageFragment :
     }
 
     private fun initNewMovieListAdapter(response: List<MovieModel>) {
+        viewmodel.newMovieList = response as ArrayList<MovieModel>
         val layoutManager = object : LinearLayoutManager(context, HORIZONTAL, false) {
             override fun canScrollVertically(): Boolean {
                 return false // Disable vertical scrolling
             }
         }
         newMoviesListAdapter =
-            MovieListAdapter(response, MovieListAdapter.MovieItemClick {
+            MovieListAdapter(viewmodel.newMovieList, MovieListAdapter.MovieItemClick {
                 viewmodel.navigate(
                     NavigationCommand.Deeplink(
                         "com.example://movieDetails/{movieId}",

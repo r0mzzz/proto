@@ -2,6 +2,8 @@ package com.example.home.viewmodel
 
 import com.example.core.base.BaseViewModel
 import com.example.domain.entity.enums.MovieType
+import com.example.domain.entity.home.MovieModel
+import com.example.domain.entity.home.MoviesResponse
 import com.example.domain.usecase.movies.GetMoviesUseCase
 import com.example.home.effect.HomePageEffect
 import com.example.home.state.HomePageState
@@ -15,6 +17,8 @@ class HomePageViewModel @Inject constructor(
 ) : BaseViewModel<HomePageState, HomePageEffect>() {
 
     var dominantColor: Int = 0
+    var movieList = arrayListOf<MovieModel>()
+    var newMovieList = arrayListOf<MovieModel>()
 
     init {
         getMovies(MovieType.FILM, "2023")

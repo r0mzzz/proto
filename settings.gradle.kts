@@ -22,7 +22,6 @@ dependencyResolutionManagement {
 rootProject.name = "proto"
 include(":app")
 include(":core")
-include(":features")
 include(":features:settings")
 include(":features:home")
 include(":uikit")

@@ -10,6 +10,10 @@
         android:name="com.example.moviedetails.view.MovieDetailsFragment"
         android:label="fragment_movie_details"
         tools:layout="@layout/fragment_movie_details">
-        <deepLink app:uri="com.example://movieDetails" />
+        <argument
+            android:name="movieId"
+            app:argType="string"
+            android:defaultValue="0" />
+        <deepLink app:uri="com.example://movieDetails/{movieId}" />
     </fragment>
 </navigation>

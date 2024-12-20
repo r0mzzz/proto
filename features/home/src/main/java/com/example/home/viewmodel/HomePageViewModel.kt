@@ -18,6 +18,32 @@ class HomePageViewModel @Inject constructor(
 
     init {
         getMovies(MovieType.FILM, "2023")
+        getNewMovies(MovieType.FILM, "2021", "2022")
+    }
+
+    private fun getNewMovies(
+        type: MovieType? = null,
+        yearFrom: String? = null,
+        yearTo: String? = null,
+        ratingFrom: String? = null,
+        ratingTo: String? = null
+    ) {
+        getMoviesUseCase.launch(
+            GetMoviesUseCase.Params(
+                type,
+                yearFrom,
+                yearTo,
+                ratingFrom,
+                ratingTo
+            )
+        ) {
+            onSuccess = {
+                postState(state = HomePageState.GetNewMoviesList(it))
+            }
+            onError = {
+                postState(state = HomePageState.ErrorOnMovieList(it))
+            }
+        }
     }
 
     private fun getMovies(

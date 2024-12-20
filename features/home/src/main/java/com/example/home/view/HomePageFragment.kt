@@ -11,12 +11,15 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.ScrollView
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.HandlerCompat.postDelayed
 import androidx.palette.graphics.Palette
@@ -50,6 +53,7 @@ class HomePageFragment :
     override val bindingCallback: (LayoutInflater, ViewGroup?, Boolean) -> FragmentHomePageBinding
         get() = FragmentHomePageBinding::inflate
     private lateinit var movieListAdapter: MovieListAdapter
+    private lateinit var newMoviesListAdapter: MovieListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -118,11 +122,13 @@ class HomePageFragment :
 
     private fun initViews() {
         binding.apply {
-//            toolbar.setToolBarRightActionClick {
-//                Toast.makeText(requireContext(), "dsfdsfsdf", Toast.LENGTH_SHORT).show()
-//            }
-//            toolbar.setTitle("HomePage")
         }
+    }
+
+    private fun addIconToButton(button: Button, icon: Drawable?) {
+        button.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null)
+        icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
+        button.setCompoundDrawables(icon, null, null, null)
     }
 
     private fun initMovieListAdapter(response: List<MovieModel>) {
@@ -135,19 +141,38 @@ class HomePageFragment :
             MovieListAdapter(response, MovieListAdapter.MovieItemClick {
                 viewmodel.navigate(
                     NavigationCommand.Deeplink(
-                        "com.example://movieDetails",
-                        null,
+                        "com.example://movieDetails/{movieId}",
+                        mutableMapOf("movieId" to it.kinopoiskId.toString()),
                         true
                     )
                 )
             })
         binding.movieListAdapter.adapter = movieListAdapter
         binding.movieListAdapter.layoutManager = layoutManager
-        updateMovieOfTheDay(response[17])
+        updateMovieOfTheDay(response[10])
+    }
+
+    private fun initNewMovieListAdapter(response: List<MovieModel>) {
+        val layoutManager = object : LinearLayoutManager(context, HORIZONTAL, false) {
+            override fun canScrollVertically(): Boolean {
+                return false // Disable vertical scrolling
+            }
+        }
+        newMoviesListAdapter =
+            MovieListAdapter(response, MovieListAdapter.MovieItemClick {
+                viewmodel.navigate(
+                    NavigationCommand.Deeplink(
+                        "com.example://movieDetails/{movieId}",
+                        mutableMapOf("movieId" to it.kinopoiskId.toString()),
+                        true
+                    )
+                )
+            })
+        binding.newListAdapter.adapter = newMoviesListAdapter
+        binding.newListAdapter.layoutManager = layoutManager
     }
 
     private fun updateMovieOfTheDay(movie: MovieModel) {
-        Log.d("Glide", movie.posterUrl.toString())
         binding.movieOfTheDayPoster.loadImageFromGLideRounded(
             movie.posterUrl.toString(),
             24,
@@ -237,6 +262,10 @@ class HomePageFragment :
 
             is HomePageState.GetMoviesList -> {
                 state.response.items?.let { initMovieListAdapter(it) }
+            }
+
+            is HomePageState.GetNewMoviesList -> {
+                state.response.items?.let { initNewMovieListAdapter(it) }
             }
         }
     }

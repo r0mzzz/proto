@@ -82,22 +82,18 @@ class HomePageFragment :
                 )
                 setToolbarColorWithTransition(toolbarColor)
             }
-            // Adjust toolbar color based on scroll position (scrollFraction goes from 0 to 1)
         }
     }
 
     private fun resetToolbarColorWithTransition() {
-        // Reset the toolbar color to the default (transparent)
         val defaultColor = viewmodel.dominantColor
         setToolbarColorWithTransition(defaultColor)
     }
 
     private fun setToolbarColorWithTransition(color: Int) {
-        // Extract the current color from the toolbar's background (if it's a ColorDrawable)
         val currentColor =
             (binding.toolbar.background as? ColorDrawable)?.color ?: Color.TRANSPARENT
 
-        // Animate the color change smoothly
         val colorAnimator = ValueAnimator.ofArgb(currentColor, color)
         colorAnimator.duration = 300 // 300ms for a smooth transition
         colorAnimator.addUpdateListener { animator ->
@@ -128,12 +124,6 @@ class HomePageFragment :
     private fun initViews() {
         binding.apply {
         }
-    }
-
-    private fun addIconToButton(button: Button, icon: Drawable?) {
-        button.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null)
-        icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
-        button.setCompoundDrawables(icon, null, null, null)
     }
 
     private fun initMovieListAdapter(response: List<MovieModel>) {

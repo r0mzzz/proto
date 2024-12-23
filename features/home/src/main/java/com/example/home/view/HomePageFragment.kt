@@ -59,8 +59,8 @@ class HomePageFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewmodel.getMovies(MovieType.FILM, "2019", null, "7", "10")
-        viewmodel.getNewMovies(MovieType.FILM, "2021", "2022", "7", "10")
+        viewmodel.getMovies(MovieType.FILM, "2019", "2019", "7", "10")
+        viewmodel.getNewMovies(MovieType.FILM, "2022", "2023", "7", "10")
         initViews()
         handleToolbarBackgroundOnScroll()
     }

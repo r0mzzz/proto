@@ -7,21 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.example.core.extensions.deeplinkNavigate
 import com.example.core.tools.NavigationCommand
-import kotlinx.coroutines.launch
+
 
 abstract class BaseFragment<State, Effect, VB : ViewBinding, ViewModel : BaseViewModel<State, Effect>> :
     Fragment() {
-
+    private var loadingDialog: CustomProgressBar? = null
     private var _binding: VB? = null
     lateinit var binding: VB
     lateinit var viewmodel: ViewModel
@@ -59,10 +56,31 @@ abstract class BaseFragment<State, Effect, VB : ViewBinding, ViewModel : BaseVie
                 findNavController().navigateUp()
             }
         }
+        viewmodel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                showLoadingDialog()
+            } else {
+                hideLoadingDialog()
+            }
+        }
     }
 
-    protected fun <T> LiveData<T>.observe(block: (T) -> Unit){
+    protected fun <T> LiveData<T>.observe(block: (T) -> Unit) {
         observe(viewLifecycleOwner, block)
+    }
+
+    private fun showLoadingDialog() {
+        if (loadingDialog == null) {
+            loadingDialog =
+                CustomProgressBar.newInstance()
+        }
+
+        loadingDialog?.show(requireActivity().supportFragmentManager)
+    }
+
+
+    private fun hideLoadingDialog() {
+        loadingDialog?.dismiss()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -98,6 +116,7 @@ abstract class BaseFragment<State, Effect, VB : ViewBinding, ViewModel : BaseVie
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        loadingDialog?.dismiss() // Dismiss dialog to avoid leaks
     }
 
     open fun onNewIntent(intent: Intent?) {}

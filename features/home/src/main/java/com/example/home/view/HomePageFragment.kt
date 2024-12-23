@@ -22,6 +22,7 @@ import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.HandlerCompat.postDelayed
+import androidx.lifecycle.Observer
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.load.DataSource
@@ -30,6 +31,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.core.base.BaseFragment
 import com.example.core.tools.NavigationCommand
+import com.example.domain.entity.enums.MovieType
 import com.example.domain.entity.home.Genre
 import com.example.domain.entity.home.MovieModel
 import com.example.home.R
@@ -57,9 +59,12 @@ class HomePageFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewmodel.getMovies(MovieType.FILM, "2023")
+        viewmodel.getNewMovies(MovieType.FILM, "2022", "2023", "7", "10")
         initViews()
         handleToolbarBackgroundOnScroll()
     }
+
 
     private fun handleToolbarBackgroundOnScroll() {
         val scrollView = binding.scrollbar

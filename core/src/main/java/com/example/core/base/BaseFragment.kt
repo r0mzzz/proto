@@ -48,19 +48,19 @@ abstract class BaseFragment<State, Effect, VB : ViewBinding, ViewModel : BaseVie
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewmodel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                showLoadingDialog()
+            } else {
+                hideLoadingDialog()
+            }
+        }
         binding.let {
             it.bindViews()
         }
         binding.root.findViewWithTag<ImageView>("toolbarBackImage")?.let {
             it.setOnClickListener {
                 findNavController().navigateUp()
-            }
-        }
-        viewmodel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            if (isLoading) {
-                showLoadingDialog()
-            } else {
-                hideLoadingDialog()
             }
         }
     }

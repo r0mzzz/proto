@@ -11,6 +11,15 @@ import com.example.core.tools.NavigationCommand
 import com.example.domain.base.BaseUseCase
 import com.example.domain.base.CompletionBlock
 import hesab.az.core.tools.SingleLiveEvent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 open class BaseViewModel<State, Effect> : ViewModel() {
@@ -45,6 +54,28 @@ open class BaseViewModel<State, Effect> : ViewModel() {
         _isLoading.postValue(state)
     }
 
+    protected fun <T> Flow<T>.handleError(): Flow<T> = catch { handleError(it) }
+
+    protected fun <T> Flow<T>.handleLoading(loadingHandle: (Boolean) -> Unit = ::handleLoading): Flow<T> =
+        flow {
+            this@handleLoading
+                .onStart { loadingHandle(true) }
+                .onCompletion { loadingHandle(false) }
+                .collect { value ->
+                    loadingHandle(false)
+                    emit(value)
+                }
+        }
+
+
+    protected fun <T> Flow<T>.launch(
+        scope: CoroutineScope = viewModelScope,
+        loadingHandle: (Boolean) -> Unit = ::handleLoading
+    ): Job = this.handleError()
+        .handleError()
+        .handleLoading(loadingHandle)
+        .launchIn(scope)
+
     protected fun postEffect(effect: Effect) {
         _effect.postValue(effect)
     }
@@ -64,22 +95,21 @@ open class BaseViewModel<State, Effect> : ViewModel() {
         block: CompletionBlock<R>
     ) {
         viewModelScope.launch {
-            loadingHandle(true)
             val actualRequest = BaseUseCase.Request<R>().apply(block)
             val proxy: CompletionBlock<R> = {
                 onStart = {
+                    loadingHandle(true)
                     actualRequest.onStart?.invoke()
                 }
                 onSuccess = {
                     actualRequest.onSuccess(it)
-                    loadingHandle(false)
                 }
                 onTerminate = {
                     actualRequest.onTerminate?.invoke()
+                    loadingHandle(false)
                 }
                 onError = {
                     actualRequest.onError?.invoke(it)
-                    loadingHandle(false)
                 }
             }
             execute(param, proxy)

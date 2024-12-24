@@ -2,7 +2,6 @@ package com.example.home.view
 
 import android.animation.ValueAnimator
 import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
@@ -11,24 +10,18 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.Adapter
 import android.widget.ImageView
-import android.widget.ScrollView
-import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.os.HandlerCompat.postDelayed
-import androidx.lifecycle.Observer
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.example.core.base.BaseAdapter
 import com.example.core.base.BaseFragment
 import com.example.core.tools.NavigationCommand
 import com.example.domain.entity.enums.MovieType
@@ -42,8 +35,6 @@ import com.example.home.effect.HomePageEffect
 import com.example.home.state.HomePageState
 import com.example.home.viewmodel.HomePageViewModel
 import com.example.uikit.extensions.loadImageFromGLideRounded
-import com.example.uikit.extensions.loadImageFromGlide
-import com.example.uikit.toolbar.MyToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -59,9 +50,19 @@ class HomePageFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewmodel.getMovies(MovieType.FILM, "2019", "2019", "7", "10")
-        viewmodel.getNewMovies(MovieType.FILM, "2022", "2023", "7", "10")
         initViews()
+        if (viewmodel.movieList.value == null) {
+            viewmodel.getMovies(MovieType.FILM, "2019", "2019", "7", "10")
+        } else {
+            movieListAdapter.submitList(viewmodel.movieList.value)
+        }
+        if (viewmodel.newMovieList.value == null) {
+            viewmodel.getNewMovies(MovieType.FILM, "2022", "2023", "7", "10")
+            viewmodel.newMovieList.value?.get(19)?.let { it1 -> updateMovieOfTheDay(it1) }
+        } else {
+            newMoviesListAdapter.submitList(viewmodel.newMovieList.value)
+        }
+        updateMovieOfTheDay(viewmodel.newMovieList.value?.get(10) ?: MovieModel())
         handleToolbarBackgroundOnScroll()
     }
 
@@ -122,50 +123,51 @@ class HomePageFragment :
     }
 
     private fun initViews() {
-        binding.apply {
-        }
+        initMovieListAdapter()
+        initNewMovieListAdapter()
     }
 
-    private fun initMovieListAdapter(response: List<MovieModel>) {
-        viewmodel.movieList = response as ArrayList<MovieModel>
+    private fun initMovieListAdapter() {
         val layoutManager = object : LinearLayoutManager(context, HORIZONTAL, false) {
             override fun canScrollVertically(): Boolean {
                 return false // Disable vertical scrolling
             }
         }
         movieListAdapter =
-            MovieListAdapter(viewmodel.movieList, MovieListAdapter.MovieItemClick {
-                viewmodel.navigate(
-                    NavigationCommand.Deeplink(
-                        "com.example://movieDetails/{movieId}",
-                        mutableMapOf("movieId" to it.kinopoiskId.toString()),
-                        true
+            MovieListAdapter(
+                MovieListAdapter.MovieItemClick {
+                    viewmodel.navigate(
+                        NavigationCommand.Deeplink(
+                            "com.example://movieDetails/{movieId}",
+                            mutableMapOf("movieId" to it.kinopoiskId.toString()),
+                            true
+                        )
                     )
-                )
-            })
-        binding.movieListAdapter.adapter = movieListAdapter
+                })
         binding.movieListAdapter.layoutManager = layoutManager
+        binding.movieListAdapter.adapter = movieListAdapter
     }
 
-    private fun initNewMovieListAdapter(response: List<MovieModel>) {
-        viewmodel.newMovieList = response as ArrayList<MovieModel>
+    private fun initNewMovieListAdapter() {
+
         val layoutManager = object : LinearLayoutManager(context, HORIZONTAL, false) {
             override fun canScrollVertically(): Boolean {
                 return false // Disable vertical scrolling
             }
         }
         newMoviesListAdapter =
-            MovieListAdapter(viewmodel.newMovieList, MovieListAdapter.MovieItemClick {
-                viewmodel.navigate(
-                    NavigationCommand.Deeplink(
-                        "com.example://movieDetails/{movieId}",
-                        mutableMapOf("movieId" to it.kinopoiskId.toString()),
-                        true
+            MovieListAdapter(
+                MovieListAdapter.MovieItemClick {
+                    viewmodel.navigate(
+                        NavigationCommand.Deeplink(
+                            "com.example://movieDetails/{movieId}",
+                            mutableMapOf("movieId" to it.kinopoiskId.toString()),
+                            true
+                        )
                     )
-                )
-            })
-        binding.newListAdapter.adapter = newMoviesListAdapter
+                })
         binding.newListAdapter.layoutManager = layoutManager
+        binding.newListAdapter.adapter = newMoviesListAdapter
     }
 
     private fun updateMovieOfTheDay(movie: MovieModel) {
@@ -258,14 +260,17 @@ class HomePageFragment :
 
             is HomePageState.GetMoviesList -> {
                 state.response.items?.let {
-                    initMovieListAdapter(it)
-                    updateMovieOfTheDay(state.response.items!![10])
+                    viewmodel.movieList.value = state.response.items
+                    movieListAdapter.submitList(it)
                 }
+
             }
 
             is HomePageState.GetNewMoviesList -> {
                 state.response.items?.let {
-                    initNewMovieListAdapter(it)
+                    viewmodel.newMovieList.value = state.response.items
+                    newMoviesListAdapter.submitList(it)
+                    viewmodel.newMovieList.value?.get(19)?.let { it1 -> updateMovieOfTheDay(it1) }
                 }
             }
         }

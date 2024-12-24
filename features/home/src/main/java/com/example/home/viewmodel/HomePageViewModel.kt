@@ -18,6 +18,7 @@ class HomePageViewModel @Inject constructor(
 
     var dominantColor: Int = 0
     var movieList = MutableLiveData<List<MovieModel>?>(null)
+    var newMovieList = MutableLiveData<List<MovieModel>?>(null)
 
 
      fun getNewMovies(

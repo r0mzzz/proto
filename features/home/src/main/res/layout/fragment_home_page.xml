@@ -124,7 +124,6 @@
                     android:foreground="@drawable/image_stroke_white"
                     android:outlineProvider="none"
                     android:scaleType="fitXY"
-                    android:src="@drawable/movie_poster"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

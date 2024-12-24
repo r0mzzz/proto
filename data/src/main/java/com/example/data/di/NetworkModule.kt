@@ -1,6 +1,8 @@
 package com.example.data.di
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -8,16 +10,19 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.io.File
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+
     private val API_KEY = "9f093681-2656-4e6f-ac06-6ee5ef514ff9"
     private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
 
@@ -27,18 +32,28 @@ class NetworkModule {
         return context
     }
 
+
     @Provides
-    fun providesOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+    fun providesOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        @ApplicationContext context: Context
+    ): OkHttpClient {
+        val cacheSize = 10 * 1024 * 1024 // 10 MB
+        val cacheDir = File(context.cacheDir, "http_cache")
+        val cache = Cache(cacheDir, cacheSize.toLong())
         val headerInterceptor = Interceptor { chain ->
             val originalRequest = chain.request()
-            val requestWithHeaders = originalRequest.newBuilder()
-                .addHeader("X-API-KEY", API_KEY) // Add Authorization header
-                .addHeader("Content-Type", "application/json") // Add Content-Type header
-                .build()
+            val requestWithHeaders =
+                originalRequest.newBuilder()
+                    .addHeader("X-API-KEY", API_KEY)  // Add Authorization header
+                    .addHeader("Content-Type", "application/json")  // Add Content-Type header
+                    .build()
+
             chain.proceed(requestWithHeaders)
         }
 
         return OkHttpClient.Builder()
+            .cache(cache)
             .addInterceptor(headerInterceptor)  // Add custom header interceptor
             .addInterceptor(loggingInterceptor) // Add logging interceptor
             .build()

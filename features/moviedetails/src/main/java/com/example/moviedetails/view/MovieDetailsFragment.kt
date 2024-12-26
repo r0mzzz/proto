@@ -1,5 +1,6 @@
 package com.example.moviedetails.view
 
+import android.graphics.Movie
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.webkit.WebViewClient
 import androidx.navigation.fragment.navArgs
 import com.example.core.base.BaseFragment
 import com.example.domain.entity.moviedetails.MovieDetailsModel
+import com.example.domain.entity.moviedetails.MovieStuffModel
 import com.example.domain.entity.moviedetails.TrailerItems
 import com.example.moviedetails.databinding.FragmentMovieDetailsBinding
 import com.example.moviedetails.effect.MovieDetailsPageEffect
@@ -51,6 +53,28 @@ class MovieDetailsFragment :
 
     private fun updateMovieDetails(response: MovieDetailsModel) {
         binding.movieTitle.text = response.nameEn ?: response.nameRu
+        binding.year.text = response.year.toString()
+        binding.filmLength.text = convertMinutesToFilmLength(response.filmLength.toString())
+        binding.description.text = response.description
+        binding.ageLimit.text = response.ratingAgeLimits?.replace("age", "").plus("+")
+    }
+
+    private fun collectActors(actors: List<MovieStuffModel>) {
+        val actorNames = mutableListOf<String>()
+
+        actors.filter { it.professionKey == "ACTOR" }
+            .take(8)
+            .forEach {
+                actorNames.add(it.nameRu.toString())
+            }
+        binding.actor.text = actorNames.joinToString(", ")
+    }
+
+    private fun convertMinutesToFilmLength(totalMinutes: String): String {
+        val hours = totalMinutes.toInt() / 60
+        val minutes = totalMinutes.toInt() % 60
+        val time = "$hours h $minutes m"
+        return time
     }
 
     private fun updateVideo(response: List<TrailerItems>?) {
@@ -71,8 +95,6 @@ class MovieDetailsFragment :
                 videoUrl = it.url.toString() + "?controls=0&modestbranding=0"
             }
         }
-        Log.d("sdfdsfsdf", videoUrl.toString())
-        // Load HTML content in WebView
         binding.player.loadUrl(videoUrl)
         binding.player.webChromeClient = WebChromeClient()
     }
@@ -80,12 +102,18 @@ class MovieDetailsFragment :
     override fun observeState(state: MovieDetailsPageState) {
         when (state) {
             is MovieDetailsPageState.GetMovieDetailSuccess -> {
+                viewmodel.getMovieStuff(state.response.kinopoiskId.toString())
                 viewmodel.getMovieTrailer(state.response.kinopoiskId.toString())
                 updateMovieDetails(state.response)
             }
 
             is MovieDetailsPageState.GetMovieTrailerSuccess -> {
                 updateVideo(state.response.items)
+            }
+
+            is MovieDetailsPageState.GetMovieStuffSuccess -> {
+                state.response?.get(0)?.nameRu?.let { Log.d("asdfsadasd", it) }
+                collectActors(state.response)
             }
         }
     }

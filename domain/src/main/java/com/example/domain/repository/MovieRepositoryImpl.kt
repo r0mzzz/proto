@@ -3,6 +3,7 @@ package com.example.domain.repository
 import com.example.domain.entity.enums.MovieType
 import com.example.domain.entity.home.MoviesResponse
 import com.example.domain.entity.moviedetails.MovieDetailsModel
+import com.example.domain.entity.moviedetails.MovieStuffModel
 import com.example.domain.entity.moviedetails.MovieTrailerModel
 import com.example.domain.services.MovieService
 import javax.inject.Inject
@@ -28,6 +29,10 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieTrailer(id: String): MovieTrailerModel {
         return movieService.getMovieTrailer(id)
 
+    }
+
+    override suspend fun getMovieStuff(id: String): List<MovieStuffModel> {
+        return movieService.getMovieStuff(id)
     }
 
 }

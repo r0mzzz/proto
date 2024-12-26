@@ -2,6 +2,7 @@ package com.example.moviedetails.viewmodel
 
 import com.example.core.base.BaseViewModel
 import com.example.domain.usecase.movies.GetMovieDetailsUseCase
+import com.example.domain.usecase.movies.GetMovieStuffUseCase
 import com.example.domain.usecase.movies.GetMovieTrailerUseCase
 import com.example.moviedetails.effect.MovieDetailsPageEffect
 import com.example.moviedetails.state.MovieDetailsPageState
@@ -12,7 +13,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     private val getMovieDetailUseCase: GetMovieDetailsUseCase,
-    private val getMovieTrailerUseCase: GetMovieTrailerUseCase
+    private val getMovieTrailerUseCase: GetMovieTrailerUseCase,
+    private val getMovieStuffUseCase: GetMovieStuffUseCase
 
 ) : BaseViewModel<MovieDetailsPageState, MovieDetailsPageEffect>() {
 
@@ -29,6 +31,14 @@ class MovieDetailsViewModel @Inject constructor(
         getMovieTrailerUseCase.launch(GetMovieTrailerUseCase.Params(id)) {
             onSuccess = {
                 postState(MovieDetailsPageState.GetMovieTrailerSuccess(it))
+            }
+        }
+    }
+
+    fun getMovieStuff(id: String) {
+        getMovieStuffUseCase.launch(GetMovieStuffUseCase.Params(id)) {
+            onSuccess = {
+                postState(MovieDetailsPageState.GetMovieStuffSuccess(it))
             }
         }
     }

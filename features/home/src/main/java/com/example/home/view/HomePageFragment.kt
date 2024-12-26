@@ -9,11 +9,9 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.ImageView
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +19,6 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.example.core.base.BaseAdapter
 import com.example.core.base.BaseFragment
 import com.example.core.tools.NavigationCommand
 import com.example.domain.entity.enums.MovieType
@@ -52,12 +49,12 @@ class HomePageFragment :
         super.onViewCreated(view, savedInstanceState)
         initViews()
         if (viewmodel.movieList.value == null) {
-            viewmodel.getMovies(MovieType.FILM, "2019", "2019", "7", "10")
+            viewmodel.getMovies(MovieType.FILM, "1994", "1994", "8", "10")
         } else {
             movieListAdapter.submitList(viewmodel.movieList.value)
         }
         if (viewmodel.newMovieList.value == null) {
-            viewmodel.getNewMovies(MovieType.FILM, "2022", "2023", "7", "10")
+            viewmodel.getNewMovies(MovieType.FILM, "2009", "2010", "8", "10")
             viewmodel.newMovieList.value?.get(19)?.let { it1 -> updateMovieOfTheDay(it1) }
         } else {
             newMoviesListAdapter.submitList(viewmodel.newMovieList.value)

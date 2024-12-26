@@ -24,7 +24,7 @@ import javax.inject.Singleton
 class NetworkModule {
 
     private val API_KEY = "9f093681-2656-4e6f-ac06-6ee5ef514ff9"
-    private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
+    private val BASE_URL = "https://kinopoiskapiunofficial.tech/api/"
 
     @Provides
     @Singleton

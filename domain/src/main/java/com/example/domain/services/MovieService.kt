@@ -3,6 +3,7 @@ package com.example.domain.services
 import com.example.domain.entity.enums.MovieType
 import com.example.domain.entity.home.MoviesResponse
 import com.example.domain.entity.moviedetails.MovieDetailsModel
+import com.example.domain.entity.moviedetails.MovieTrailerModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -22,6 +23,11 @@ interface MovieService {
     suspend fun getMovieDetails(
         @Path("id") id: String? = null,
     ): MovieDetailsModel
+
+    @GET("films/{id}/videos")
+    suspend fun getMovieTrailer(
+        @Path("id") id: String? = null,
+    ): MovieTrailerModel
 }
 
 

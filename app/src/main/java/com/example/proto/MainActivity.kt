@@ -1,9 +1,12 @@
 package com.example.proto
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
@@ -13,6 +16,7 @@ import com.example.core.base.BaseActivity
 import com.example.proto.databinding.FragmentMainActivityBinding
 import com.example.proto.viewmodel.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.elevation.SurfaceColors
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -31,11 +35,16 @@ class MainActivity : BaseActivity() {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         );
+        changeSystemBottomBarColor()
         super.onCreate(savedInstanceState)
         mainBinding = FragmentMainActivityBinding.inflate(LayoutInflater.from(this)).also {
             setContentView(it.root)
         }
         setStartGraph(savedInstanceState)
+    }
+
+    private fun changeSystemBottomBarColor(){
+        window.setNavigationBarColor(SurfaceColors.SURFACE_2.getColor(this));
 
     }
 

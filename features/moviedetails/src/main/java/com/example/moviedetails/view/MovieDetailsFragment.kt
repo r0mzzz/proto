@@ -20,6 +20,7 @@ import com.example.moviedetails.databinding.FragmentMovieDetailsBinding
 import com.example.moviedetails.effect.MovieDetailsPageEffect
 import com.example.moviedetails.state.MovieDetailsPageState
 import com.example.moviedetails.viewmodel.MovieDetailsViewModel
+import com.google.android.material.internal.TextDrawableHelper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,19 +56,22 @@ class MovieDetailsFragment :
         binding.movieTitle.text = response.nameEn ?: response.nameRu
         binding.year.text = response.year.toString()
         binding.filmLength.text = convertMinutesToFilmLength(response.filmLength.toString())
-        binding.description.text = response.description
+        binding.description.text = response.shortDescription
         binding.ageLimit.text = response.ratingAgeLimits?.replace("age", "").plus("+")
     }
 
-    private fun collectActors(actors: List<MovieStuffModel>) {
-        val actorNames = mutableListOf<String>()
 
-        actors.filter { it.professionKey == "ACTOR" }
+    private fun collectStuff(staff: List<MovieStuffModel>) {
+        val actorNames = mutableListOf<String>()
+        staff.filter { it.professionKey == "ACTOR" }
             .take(8)
             .forEach {
                 actorNames.add(it.nameRu.toString())
             }
         binding.actor.text = actorNames.joinToString(", ")
+        binding.director.text = staff.filter { it.professionKey == "DIRECTOR" }
+            .take(1)[0].nameRu
+
     }
 
     private fun convertMinutesToFilmLength(totalMinutes: String): String {
@@ -112,8 +116,7 @@ class MovieDetailsFragment :
             }
 
             is MovieDetailsPageState.GetMovieStuffSuccess -> {
-                state.response?.get(0)?.nameRu?.let { Log.d("asdfsadasd", it) }
-                collectActors(state.response)
+                collectStuff(state.response)
             }
         }
     }

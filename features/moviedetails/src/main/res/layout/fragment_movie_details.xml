@@ -147,7 +147,7 @@
                     style="@style/SmallSubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_3sdp"
                     android:ellipsize="end"
                     android:maxLines="2"
                     android:text="gdfgdfg"

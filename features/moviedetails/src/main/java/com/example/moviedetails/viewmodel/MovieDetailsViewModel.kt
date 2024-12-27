@@ -1,6 +1,9 @@
 package com.example.moviedetails.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import com.example.core.base.BaseViewModel
+import com.example.domain.entity.home.MovieModel
+import com.example.domain.entity.moviedetails.MovieDetailsModel
 import com.example.domain.usecase.movies.GetMovieDetailsUseCase
 import com.example.domain.usecase.movies.GetMovieStuffUseCase
 import com.example.domain.usecase.movies.GetMovieTrailerUseCase
@@ -17,7 +20,9 @@ class MovieDetailsViewModel @Inject constructor(
     private val getMovieStuffUseCase: GetMovieStuffUseCase
 
 ) : BaseViewModel<MovieDetailsPageState, MovieDetailsPageEffect>() {
-
+    var movieDetails = MutableLiveData<MovieDetailsModel>(null)
+    var currentMovieId = ""
+    var previousMovieId = ""
 
     fun getMovieDetail(id: String) {
         getMovieDetailUseCase.launch(GetMovieDetailsUseCase.Params(id)) {
@@ -28,7 +33,7 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     fun getMovieTrailer(id: String) {
-        getMovieTrailerUseCase.launch(GetMovieTrailerUseCase.Params(id)) {
+        getMovieTrailerUseCase.launchNoLoading(GetMovieTrailerUseCase.Params(id)) {
             onSuccess = {
                 postState(MovieDetailsPageState.GetMovieTrailerSuccess(it))
             }
@@ -36,7 +41,7 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     fun getMovieStuff(id: String) {
-        getMovieStuffUseCase.launch(GetMovieStuffUseCase.Params(id)) {
+        getMovieStuffUseCase.launchNoLoading(GetMovieStuffUseCase.Params(id)) {
             onSuccess = {
                 postState(MovieDetailsPageState.GetMovieStuffSuccess(it))
             }

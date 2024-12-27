@@ -13,13 +13,12 @@ fun NavController.navigateWithAnimation(
     extras: Navigator.Extras? = null
 ) {
     val navOptions = NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_in_right)       // Animation when entering the new destination
-        .setExitAnim(R.anim.slide_out_left)        // Animation when leaving the current destination
-        .setPopEnterAnim(R.anim.slide_out_left)     // Animation when returning to the previous destination
-        .setPopExitAnim(R.anim.slide_in_right)    // Animation when popping the current destination off the back stack
+        .setEnterAnim(com.example.uikit.R.anim.enter_from_right)
+        .setExitAnim(com.example.uikit.R.anim.exit_to_left)
+        .setPopEnterAnim(com.example.uikit.R.anim.enter_from_left)
+        .setPopExitAnim(com.example.uikit.R.anim.exit_to_right)
         .build()
 
-    // Navigate using NavController and apply animations
     navigate(navDirections, navOptions)
 }
 
@@ -39,10 +38,17 @@ fun NavController.deeplinkNavigate(
 
     val currentId = currentDestination?.id
     if (currentId != null && isInclusive) {
+        val navOptions = NavOptions.Builder()
+            .setEnterAnim(com.example.uikit.R.anim.enter_from_right)
+            .setExitAnim(com.example.uikit.R.anim.exit_to_left)
+            .setPopEnterAnim(com.example.uikit.R.anim.enter_from_left)
+            .setPopExitAnim(com.example.uikit.R.anim.exit_to_right)
+            .setPopUpTo(currentId, false)
+            .build()
         val options = NavOptions.Builder()
             .setPopUpTo(currentId, false)
             .build()
-        navigate(deepLink, options)
+        navigate(deepLink, navOptions)
     } else
         navigate(deepLink)
 }

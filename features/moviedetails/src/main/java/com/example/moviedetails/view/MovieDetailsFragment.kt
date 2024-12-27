@@ -1,8 +1,6 @@
 package com.example.moviedetails.view
 
-import android.graphics.Movie
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +11,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.navigation.fragment.navArgs
 import com.example.core.base.BaseFragment
+import com.example.domain.entity.enums.StaffType
 import com.example.domain.entity.moviedetails.MovieDetailsModel
 import com.example.domain.entity.moviedetails.MovieStuffModel
 import com.example.domain.entity.moviedetails.TrailerItems
@@ -20,7 +19,6 @@ import com.example.moviedetails.databinding.FragmentMovieDetailsBinding
 import com.example.moviedetails.effect.MovieDetailsPageEffect
 import com.example.moviedetails.state.MovieDetailsPageState
 import com.example.moviedetails.viewmodel.MovieDetailsViewModel
-import com.google.android.material.internal.TextDrawableHelper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -47,9 +45,16 @@ class MovieDetailsFragment :
 
     private fun initViews() {
         with(binding) {
-            toolbar.setTitle("MovieDetails")
         }
-        viewmodel.getMovieDetail(args.movieId)
+        viewmodel.currentMovieId = args.movieId
+        if (viewmodel.currentMovieId !== viewmodel.previousMovieId) {
+            viewmodel.previousMovieId = viewmodel.currentMovieId
+            if (viewmodel.movieDetails.value?.kinopoiskId?.toString() != viewmodel.currentMovieId) {
+                viewmodel.getMovieDetail(args.movieId)
+            } else {
+                updateMovieDetails(viewmodel.movieDetails.value!!)
+            }
+        }
     }
 
     private fun updateMovieDetails(response: MovieDetailsModel) {
@@ -63,13 +68,13 @@ class MovieDetailsFragment :
 
     private fun collectStuff(staff: List<MovieStuffModel>) {
         val actorNames = mutableListOf<String>()
-        staff.filter { it.professionKey == "ACTOR" }
+        staff.filter { it.professionKey == StaffType.ACTOR.name }
             .take(8)
             .forEach {
                 actorNames.add(it.nameRu.toString())
             }
         binding.actor.text = actorNames.joinToString(", ")
-        binding.director.text = staff.filter { it.professionKey == "DIRECTOR" }
+        binding.director.text = staff.filter { it.professionKey == StaffType.DIRECTOR.name }
             .take(1)[0].nameRu
 
     }
@@ -106,6 +111,7 @@ class MovieDetailsFragment :
     override fun observeState(state: MovieDetailsPageState) {
         when (state) {
             is MovieDetailsPageState.GetMovieDetailSuccess -> {
+                viewmodel.movieDetails.value = state.response
                 viewmodel.getMovieStuff(state.response.kinopoiskId.toString())
                 viewmodel.getMovieTrailer(state.response.kinopoiskId.toString())
                 updateMovieDetails(state.response)

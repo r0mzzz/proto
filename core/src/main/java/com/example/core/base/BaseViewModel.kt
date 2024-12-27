@@ -67,6 +67,9 @@ open class BaseViewModel<State, Effect> : ViewModel() {
                 }
         }
 
+    protected fun <T> Flow<T>.launchNoLoading(scope: CoroutineScope = viewModelScope): Job =
+        this.handleError()
+            .launchIn(scope)
 
     protected fun <T> Flow<T>.launch(
         scope: CoroutineScope = viewModelScope,
@@ -88,6 +91,24 @@ open class BaseViewModel<State, Effect> : ViewModel() {
         navigationCommands.postValue(command)
     }
 
+
+    protected fun <P, R, U : BaseUseCase<P, R>> U.launchNoLoading(
+        param: P,
+        block: CompletionBlock<R> = {}
+    ) {
+        viewModelScope.launch {
+            val actualRequest = BaseUseCase.Request<R>().apply(block)
+            val proxy: CompletionBlock<R> = {
+                onStart = actualRequest.onStart
+                onSuccess = actualRequest.onSuccess
+                onTerminate = actualRequest.onTerminate
+                onError = {
+                    actualRequest.onError?.invoke(it) ?: handleError(it)
+                }
+            }
+            execute(param, proxy)
+        }
+    }
 
     protected fun <P, R, U : BaseUseCase<P, R>> U.launch(
         param: P,

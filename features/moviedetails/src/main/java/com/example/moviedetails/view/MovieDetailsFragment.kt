@@ -77,7 +77,7 @@ class MovieDetailsFragment :
     private fun convertMinutesToFilmLength(totalMinutes: String): String {
         val hours = totalMinutes.toInt() / 60
         val minutes = totalMinutes.toInt() % 60
-        val time = "$hours h $minutes m"
+        val time = "$hours ч. $minutes мин."
         return time
     }
 

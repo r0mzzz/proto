@@ -37,7 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Background image -->
             <View
                 android:id="@+id/wrapper_background"
                 android:layout_width="match_parent"
@@ -116,7 +115,7 @@
                 <ImageView
                     android:id="@+id/movie_of_the_day_poster"
                     android:layout_width="350dp"
-                    android:layout_height="500sp"
+                    android:layout_height="500dp"
                     android:layout_margin="16sp"
                     android:clipChildren="false"
                     android:clipToPadding="false"

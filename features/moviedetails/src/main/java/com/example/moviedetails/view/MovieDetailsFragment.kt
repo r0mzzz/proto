@@ -19,6 +19,7 @@ import com.example.moviedetails.databinding.FragmentMovieDetailsBinding
 import com.example.moviedetails.effect.MovieDetailsPageEffect
 import com.example.moviedetails.state.MovieDetailsPageState
 import com.example.moviedetails.viewmodel.MovieDetailsViewModel
+import com.example.uikit.extensions.gone
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -63,6 +64,7 @@ class MovieDetailsFragment :
         binding.filmLength.text = convertMinutesToFilmLength(response.filmLength.toString())
         binding.description.text = response.shortDescription
         binding.ageLimit.text = response.ratingAgeLimits?.replace("age", "").plus("+")
+        binding.blackScreen.gone()
     }
 
 
@@ -89,7 +91,6 @@ class MovieDetailsFragment :
     private fun updateVideo(response: List<TrailerItems>?) {
         var videoUrl = ""
         val webSettings = binding.player.settings
-        webSettings.javaScriptEnabled = true
         webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         binding.player.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(

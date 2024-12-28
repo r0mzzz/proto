@@ -1,5 +1,6 @@
 package com.example.home.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.core.base.BaseViewModel
 import com.example.domain.entity.enums.MovieType
@@ -19,7 +20,13 @@ class HomePageViewModel @Inject constructor(
     var dominantColor: Int = 0
     var movieList = MutableLiveData<List<MovieModel>?>(null)
     var newMovieList = MutableLiveData<List<MovieModel>?>(null)
+    private val _toolbarColor = MutableLiveData<Int>()
+    val toolbarColor: LiveData<Int> get() = _toolbarColor
 
+    // Call this to save the current toolbar color
+    fun setToolbarColor(color: Int) {
+        _toolbarColor.value = color
+    }
 
      fun getNewMovies(
         type: MovieType? = null,

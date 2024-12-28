@@ -7,6 +7,13 @@
     android:background="@color/black"
     tools:context=".view.MovieDetailsFragment">
 
+    <FrameLayout
+        android:id="@+id/black_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:translationZ="@dimen/_1sdp" />
+
     <com.example.uikit.toolbar.MyToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -61,13 +68,13 @@
                 app:layout_constraintTop_toBottomOf="@id/movie_title" />
 
             <TextView
-                android:paddingHorizontal="@dimen/_3sdp"
-                android:background="@drawable/badge_grey"
                 android:id="@+id/age_limit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/badge_grey"
+                android:paddingHorizontal="@dimen/_3sdp"
                 android:text="2024"
                 android:textColor="@color/light_grey"
                 app:layout_constraintStart_toEndOf="@id/year"
@@ -117,10 +124,10 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:paddingBottom="@dimen/_13sdp"
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingBottom="@dimen/_13sdp"
                 android:text="gdfgdfg"
                 android:textColor="@color/white"
                 app:layout_constraintTop_toBottomOf="@id/buttons" />
@@ -214,11 +221,11 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:layout_marginTop="@dimen/_9sdp"
                         android:id="@+id/add_text"
                         style="@style/SmallSubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_9sdp"
                         android:text="Мой список"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/add_icon" />
@@ -242,11 +249,11 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:layout_marginTop="@dimen/_9sdp"
                         android:id="@+id/rate_text"
                         style="@style/SmallSubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_9sdp"
                         android:text="Оценить"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/rate_icon" />
@@ -270,11 +277,11 @@
 
                     <TextView
                         android:id="@+id/share_text"
-                        android:layout_marginTop="@dimen/_9sdp"
-
                         style="@style/SmallSubtitle"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_9sdp"
                         android:text="Поделиться"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/share_icon" />

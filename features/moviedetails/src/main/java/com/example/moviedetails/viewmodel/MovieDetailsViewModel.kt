@@ -25,7 +25,7 @@ class MovieDetailsViewModel @Inject constructor(
     var previousMovieId = ""
 
     fun getMovieDetail(id: String) {
-        getMovieDetailUseCase.launch(GetMovieDetailsUseCase.Params(id)) {
+        getMovieDetailUseCase.launchNoLoading(GetMovieDetailsUseCase.Params(id)) {
             onSuccess = {
                 postState(MovieDetailsPageState.GetMovieDetailSuccess(it))
             }

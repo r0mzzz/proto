@@ -24,7 +24,6 @@ import com.example.core.tools.NavigationCommand
 import com.example.domain.entity.enums.MovieType
 import com.example.domain.entity.home.Genre
 import com.example.domain.entity.home.MovieModel
-import com.example.home.R
 import com.example.home.adapter.GenreAdapter
 import com.example.home.adapter.MovieListAdapter
 import com.example.home.databinding.FragmentHomePageBinding
@@ -33,6 +32,10 @@ import com.example.home.state.HomePageState
 import com.example.home.viewmodel.HomePageViewModel
 import com.example.uikit.extensions.loadImageFromGLideRounded
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @AndroidEntryPoint
@@ -48,19 +51,22 @@ class HomePageFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        updateMovieOfTheDay(viewmodel.movieList.value?.get(10) ?: MovieModel())
         if (viewmodel.movieList.value == null) {
             viewmodel.getMovies(MovieType.FILM, "1994", "1994", "8", "10")
+            viewmodel.movieList.value?.get(10)?.let { it1 -> updateMovieOfTheDay(it1) }
         } else {
             movieListAdapter.submitList(viewmodel.movieList.value)
         }
         if (viewmodel.newMovieList.value == null) {
             viewmodel.getNewMovies(MovieType.FILM, "2009", "2010", "8", "10")
-            viewmodel.newMovieList.value?.get(19)?.let { it1 -> updateMovieOfTheDay(it1) }
         } else {
             newMoviesListAdapter.submitList(viewmodel.newMovieList.value)
         }
-        updateMovieOfTheDay(viewmodel.newMovieList.value?.get(10) ?: MovieModel())
         handleToolbarBackgroundOnScroll()
+        viewmodel.toolbarColor.observe(viewLifecycleOwner) { toolbarColor ->
+            setToolbarColorWithTransition(toolbarColor)
+        }
     }
 
 
@@ -72,13 +78,13 @@ class HomePageFragment :
             if (scrollY == 0) {
                 resetToolbarColorWithTransition()
             } else {
-                // Adjust toolbar color based on scroll position (scrollFraction goes from 0 to 1)
                 val toolbarColor = interpolateColor(
                     viewmodel.dominantColor,
                     Color.parseColor("#99000000"),
                     scrollFraction
                 )
                 setToolbarColorWithTransition(toolbarColor)
+                viewmodel.setToolbarColor(toolbarColor)
             }
         }
     }
@@ -167,6 +173,18 @@ class HomePageFragment :
         binding.newListAdapter.adapter = newMoviesListAdapter
     }
 
+    private fun handleMovieOfTheDayClick(movieId: Int) {
+        binding.movieOfTheDayPoster.setOnClickListener {
+            viewmodel.navigate(
+                NavigationCommand.Deeplink(
+                    "com.example://movieDetails/{movieId}",
+                    mutableMapOf("movieId" to movieId.toString()),
+                    true
+                )
+            )
+        }
+    }
+
     private fun updateMovieOfTheDay(movie: MovieModel) {
         binding.movieOfTheDayPoster.loadImageFromGLideRounded(
             movie.posterUrl.toString(),
@@ -209,6 +227,7 @@ class HomePageFragment :
         val adapter = GenreAdapter(genres)
         binding.genreList.adapter = adapter
         binding.genreList.layoutManager = layoutManager
+        movie.kinopoiskId?.let { handleMovieOfTheDayClick(it) }
     }
 
     private fun postDelayed(action: () -> Unit) {
@@ -218,33 +237,33 @@ class HomePageFragment :
     }
 
     private fun setBackgroundColor() {
-        val imageView: ImageView? = binding.root.findViewById(R.id.movie_of_the_day_poster)
-        val layout: View? = binding.root.findViewById(R.id.wrapper_background)
-        val drawable = imageView?.drawable
+        val imageView: ImageView = binding.movieOfTheDayPoster
+        val layout: View = binding.wrapperBackground
+        val drawable = imageView.drawable
 
         if (drawable is BitmapDrawable) {
             val bitmap: Bitmap = drawable.bitmap
-            Palette.from(bitmap).generate { palette ->
-                val dominantColor = palette?.getDominantColor(
-                    resources.getColor(com.example.uikit.R.color.black, null)
-                ) ?: resources.getColor(com.example.uikit.R.color.black, null)
 
-                val secondaryColor = palette?.getMutedColor(
+            CoroutineScope(Dispatchers.Default).launch {
+                val palette = Palette.from(bitmap).generate()
+                val dominantColor = palette.getDominantColor(
                     resources.getColor(com.example.uikit.R.color.black, null)
-                ) ?: resources.getColor(com.example.uikit.R.color.black, null)
-
-                val fadeGradient = GradientDrawable(
-                    GradientDrawable.Orientation.TOP_BOTTOM,
-                    intArrayOf(
-                        dominantColor,
-                        secondaryColor,
-                        0xFF000000.toInt()
-                    )
                 )
-                fadeGradient.gradientType = GradientDrawable.LINEAR_GRADIENT
-                val layerDrawable = LayerDrawable(arrayOf(drawable, fadeGradient))
-                layerDrawable.setLayerGravity(1, android.view.Gravity.BOTTOM)
-                layout?.background = layerDrawable
+
+                val secondaryColor = palette.getMutedColor(
+                    resources.getColor(com.example.uikit.R.color.black, null)
+                )
+
+                withContext(Dispatchers.Main) {
+                    val fadeGradient = GradientDrawable(
+                        GradientDrawable.Orientation.TOP_BOTTOM,
+                        intArrayOf(dominantColor, secondaryColor, 0xFF000000.toInt())
+                    )
+                    fadeGradient.gradientType = GradientDrawable.LINEAR_GRADIENT
+                    val layerDrawable = LayerDrawable(arrayOf(drawable, fadeGradient))
+
+                    layout.background = layerDrawable
+                }
             }
         }
     }
@@ -259,6 +278,7 @@ class HomePageFragment :
                 state.response.items?.let {
                     viewmodel.movieList.value = state.response.items
                     movieListAdapter.submitList(it)
+                    viewmodel.movieList.value?.get(10)?.let { it1 -> updateMovieOfTheDay(it1) }
                 }
 
             }
@@ -267,7 +287,6 @@ class HomePageFragment :
                 state.response.items?.let {
                     viewmodel.newMovieList.value = state.response.items
                     newMoviesListAdapter.submitList(it)
-                    viewmodel.newMovieList.value?.get(19)?.let { it1 -> updateMovieOfTheDay(it1) }
                 }
             }
         }

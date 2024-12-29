@@ -38,7 +38,7 @@ class MovieRepositoryImpl @Inject constructor(
         return movieService.getMovieStuff(id)
     }
 
-    override suspend fun getSimilarMovies(id: String): List<SimilarMovieModel> {
+    override suspend fun getSimilarMovies(id: String): SimilarMoviesModel {
         return movieService.getSimilarMovies(id)
     }
 

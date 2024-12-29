@@ -7,6 +7,7 @@ import com.example.domain.entity.moviedetails.MovieReviewModel
 import com.example.domain.entity.moviedetails.MovieStuffModel
 import com.example.domain.entity.moviedetails.MovieTrailerModel
 import com.example.domain.entity.moviedetails.SimilarMovieModel
+import com.example.domain.entity.moviedetails.SimilarMoviesModel
 
 interface MovieRepository {
     suspend fun getMovies(
@@ -20,6 +21,6 @@ interface MovieRepository {
     suspend fun getMovieDetails(id: String): MovieDetailsModel
     suspend fun getMovieTrailer(id: String): MovieTrailerModel
     suspend fun getMovieStuff(id: String): List<MovieStuffModel>
-    suspend fun getSimilarMovies(id: String): List<SimilarMovieModel>
+    suspend fun getSimilarMovies(id: String): SimilarMoviesModel
     suspend fun getMovieReviews(id: String): List<MovieReviewModel>
 }

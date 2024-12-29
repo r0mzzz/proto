@@ -15,9 +15,9 @@ class GetSimilarMoviesUseCase @Inject constructor(
     context: CoroutineContext,
     convertor: ErrorConvertor,
     private val movieRepository: MovieRepository
-) : BaseUseCase<GetSimilarMoviesUseCase.Params, List<SimilarMovieModel>>(context, convertor) {
+) : BaseUseCase<GetSimilarMoviesUseCase.Params, SimilarMoviesModel>(context, convertor) {
 
-    override suspend fun executeOnBackground(params: Params): List<SimilarMovieModel> {
+    override suspend fun executeOnBackground(params: Params): SimilarMoviesModel {
         return movieRepository.getSimilarMovies(
             params.id,
         )

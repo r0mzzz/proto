@@ -1,5 +1,6 @@
 package com.example.moviedetails.viewmodel
 
+import android.util.Log
 import com.example.core.base.BaseViewModel
 import com.example.domain.usecase.movies.GetSimilarMoviesUseCase
 import com.example.moviedetails.effect.SimilarMoviesPageEffect
@@ -19,6 +20,9 @@ class SimilarMoviesViewModel @Inject constructor(
         getSimilarMoviesUseCase.launchNoLoading(GetSimilarMoviesUseCase.Params(id)) {
             onSuccess = {
                 postState(SimilarMoviesPageState.GetSimilarMovies(it))
+            }
+            onError = {
+                Log.d("errorrrrrrrr", it.message.toString())
             }
         }
     }

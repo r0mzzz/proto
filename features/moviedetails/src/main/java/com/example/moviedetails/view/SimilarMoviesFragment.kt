@@ -1,6 +1,7 @@
 package com.example.moviedetails.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,13 +44,11 @@ class SimilarMoviesFragment :
 
 
     private fun initViews() {
-        with(binding) {
-        }
         initSimilarMovieList()
     }
 
     private fun initSimilarMovieList() {
-        val layoutManager = object : LinearLayoutManager(context, HORIZONTAL, false) {
+        val layoutManager = object : GridLayoutManager(context, 3) {
             override fun canScrollVertically(): Boolean {
                 return false // Disable vertical scrolling
             }
@@ -73,9 +72,7 @@ class SimilarMoviesFragment :
     override fun observeState(state: SimilarMoviesPageState) {
         when (state) {
             is SimilarMoviesPageState.GetSimilarMovies -> {
-                state.response.let {
-                    similarMovieListAdapter.submitList(it)
-                }
+                    similarMovieListAdapter.submitList(state.response.items)
             }
         }
     }

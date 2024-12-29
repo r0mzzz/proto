@@ -11,7 +11,7 @@ import com.example.uikit.extensions.loadImageFromGLideRounded
 class SimilarMovieListAdapter(
     private val clickListener: MovieItemClick
 ) : BaseAdapter<SimilarMovieModel, SimilarMovieListAdapter.MovieListViewHolder>(
-    areItemsTheSame = { oldItem, newItem -> oldItem.nameRu == newItem.nameRu }) {
+    areItemsTheSame = { oldItem, newItem -> oldItem.filmId == newItem.filmId }) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieListViewHolder {

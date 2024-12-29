@@ -3,7 +3,9 @@ package com.example.moviedetails.viewmodel
 import androidx.lifecycle.MutableLiveData
 import com.example.core.base.BaseViewModel
 import com.example.domain.entity.home.MovieModel
+import com.example.domain.entity.home.MoviesResponse
 import com.example.domain.entity.moviedetails.MovieDetailsModel
+import com.example.domain.entity.moviedetails.TrailerItems
 import com.example.domain.usecase.movies.GetMovieDetailsUseCase
 import com.example.domain.usecase.movies.GetMovieStuffUseCase
 import com.example.domain.usecase.movies.GetMovieTrailerUseCase

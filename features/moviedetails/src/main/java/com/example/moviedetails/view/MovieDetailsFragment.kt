@@ -1,7 +1,6 @@
 package com.example.moviedetails.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,17 +9,21 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.TextView
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager2.widget.ViewPager2
 import com.example.core.base.BaseFragment
 import com.example.domain.entity.enums.StaffType
 import com.example.domain.entity.moviedetails.MovieDetailsModel
 import com.example.domain.entity.moviedetails.MovieStuffModel
+import com.example.domain.entity.moviedetails.SimilarMoviesModel
 import com.example.domain.entity.moviedetails.TrailerItems
+import com.example.moviedetails.adapter.ViewPagerAdapter
 import com.example.moviedetails.databinding.FragmentMovieDetailsBinding
 import com.example.moviedetails.effect.MovieDetailsPageEffect
 import com.example.moviedetails.state.MovieDetailsPageState
 import com.example.moviedetails.viewmodel.MovieDetailsViewModel
-import com.example.uikit.extensions.gone
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -29,6 +32,7 @@ class MovieDetailsFragment :
     BaseFragment<MovieDetailsPageState, MovieDetailsPageEffect, FragmentMovieDetailsBinding, MovieDetailsViewModel>() {
 
     private val args by navArgs<MovieDetailsFragmentArgs>()
+    private lateinit var similarViewPagerAdapter: ViewPagerAdapter
 
     override val bindingCallback: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMovieDetailsBinding
         get() = FragmentMovieDetailsBinding::inflate
@@ -43,53 +47,34 @@ class MovieDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        binding.segmentedGroup.setOnCheckedChangeListener { _, checkedId ->
-            Log.d("RadioButtonChecked", "CheckedId: $checkedId")
-            when (checkedId) {
-                binding.segment1.id -> {
-                    Log.d("RadioButtonChecked", "Segment 1 selected")
-                    loadContent(1)
-                }
-                binding.segment2.id -> {
-                    Log.d("RadioButtonChecked", "Segment 2 selected")
-                    loadContent(2)
-                }
-                binding.segment3.id -> {
-                    Log.d("RadioButtonChecked", "Segment 3 selected")
-                    loadContent(3)
-                }
-            }
-        }
-
-
-
-        // Initial content load (default to segment 1)
-        loadContent(1)
+        val items = listOf(
+            SimilarMoviesModel(id = args.movieId.toInt(), name = "Similar"),
+        )
+        loadContent(items)
     }
 
-    private fun loadContent(segmentId: Int) {
-        // Clear previous content
-        binding.contentFrame.removeAllViews()
+    private fun loadContent(items: List<SimilarMoviesModel>) {
+        similarViewPagerAdapter =
+            ViewPagerAdapter(items, childFragmentManager, lifecycle)
+        binding.similarMoviesViewpager.adapter = similarViewPagerAdapter
 
-        // Inflate the layout for the selected segment
-        val inflater = LayoutInflater.from(requireContext())
-        var segmentView: View? = null
+        binding.similarMoviesViewpager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                println("Page selected: $position")
+            }
+        })
 
-        when (segmentId) {
-            1 -> {
-                segmentView = inflater.inflate(com.example.moviedetails.R.layout.similar_layout, binding.contentFrame, false)
-            }
-            2 -> {
-                segmentView = inflater.inflate(com.example.moviedetails.R.layout.trailers_layout, binding.contentFrame, false)
-            }
-            3 -> {
-                segmentView = inflater.inflate(com.example.moviedetails.R.layout.trailers_layout, binding.contentFrame, false)
-            }
-        }
+        TabLayoutMediator(binding.tabs, binding.similarMoviesViewpager) { tab, position ->
+            tab.text = items[position].name
+        }.attach()
+        for (i in items.indices) {
+            val headerTab = LayoutInflater.from(requireContext())
+                .inflate(com.example.moviedetails.R.layout.tab_item, null)
+            binding.tabs.getTabAt(i)?.customView = headerTab
+            headerTab.findViewById<TextView>(com.example.moviedetails.R.id.tab_title).text =
+                items[i].name
 
-        // Add the inflated view to the FrameLayout
-        segmentView?.let {
-            binding.contentFrame.addView(it)
         }
     }
 
@@ -177,6 +162,11 @@ class MovieDetailsFragment :
                 collectStuff(state.response)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewmodel.movieDetails.value = null
     }
 
 }

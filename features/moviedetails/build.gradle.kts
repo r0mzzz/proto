@@ -50,6 +50,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 //    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
     // Coroutines
     implementation("com.google.dagger:hilt-android:2.44")

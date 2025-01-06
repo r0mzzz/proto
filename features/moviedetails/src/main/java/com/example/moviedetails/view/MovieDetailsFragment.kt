@@ -50,8 +50,8 @@ class MovieDetailsFragment :
         super.onViewCreated(view, savedInstanceState)
         initViews()
         val items = listOf(
-            ViewPagerTabModel(id = args.movieId.toInt(), name = "Similar"),
-            ViewPagerTabModel(id = 2, name = "Overviews"),
+            ViewPagerTabModel(args.movieId, "Similar"),
+            ViewPagerTabModel(args.movieId, "Overviews"),
         )
         loadContent(items)
     }

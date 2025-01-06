@@ -12,9 +12,9 @@ class GetMovieReviewsUseCase @Inject constructor(
     context: CoroutineContext,
     convertor: ErrorConvertor,
     private val movieRepository: MovieRepository
-) : BaseUseCase<GetMovieReviewsUseCase.Params, List<MovieReviewModel>>(context, convertor) {
+) : BaseUseCase<GetMovieReviewsUseCase.Params, MovieReviewModel>(context, convertor) {
 
-    override suspend fun executeOnBackground(params: Params): List<MovieReviewModel> {
+    override suspend fun executeOnBackground(params: Params): MovieReviewModel {
         return movieRepository.getMovieReviews(
             params.id,
         )

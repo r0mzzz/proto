@@ -22,5 +22,5 @@ interface MovieRepository {
     suspend fun getMovieTrailer(id: String): MovieTrailerModel
     suspend fun getMovieStuff(id: String): List<MovieStuffModel>
     suspend fun getSimilarMovies(id: String): SimilarMoviesModel
-    suspend fun getMovieReviews(id: String): List<MovieReviewModel>
+    suspend fun getMovieReviews(id: String): MovieReviewModel
 }

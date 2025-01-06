@@ -37,7 +37,7 @@ class SimilarMoviesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-            movieId = it.getInt("movieId", 0).toString() // Retrieve the movieId from arguments
+            movieId = it.getString("movieId", "").toString() // Retrieve the movieId from arguments
         }
         initViews()
         viewmodel.getSimilarMovies(movieId)

@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ViewPagerTabModel(
+    val id: String? = null,
     val name: String? = null,
-    val id: Int? = null,
 ) : java.io.Serializable

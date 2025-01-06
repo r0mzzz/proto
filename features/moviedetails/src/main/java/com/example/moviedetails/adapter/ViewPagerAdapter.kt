@@ -32,7 +32,7 @@ class ViewPagerAdapter(
              "Similar" -> {
                 val fragment = SimilarMoviesFragment()
                 val bundle = Bundle().apply {
-                    item.id?.let { putInt("movieId", it) }
+                    item.id?.let { putString("movieId", it) }
                 }
                 fragment.arguments = bundle
                 fragment.view?.post {
@@ -45,8 +45,11 @@ class ViewPagerAdapter(
             }
 
             "Overviews" -> {
-                val fragment = MovieReviewFragment(item.id)
-                // Set the ViewPager height dynamically after the layout is complete.
+                val fragment = MovieReviewFragment()
+                val bundle = Bundle().apply {
+                    item.id?.let { putString("movieId", it) }
+                }
+                fragment.arguments = bundle
                 fragment.view?.post {
                     fragment.view?.viewTreeObserver?.addOnPreDrawListener {
                         adjustViewPagerHeight(fragment)

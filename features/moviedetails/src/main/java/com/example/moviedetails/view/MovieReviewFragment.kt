@@ -9,6 +9,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.core.base.BaseFragment
 import com.example.domain.entity.moviedetails.SimilarMoviesModel
 import com.example.domain.entity.moviedetails.TrailerItems
+import com.example.moviedetails.adapter.MovieReviewListAdapter
 import com.example.moviedetails.databinding.MovieReviewBinding
 import com.example.moviedetails.databinding.SimilarLayoutBinding
 import com.example.moviedetails.effect.MovieReviewPageEffect
@@ -21,10 +22,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class MovieReviewFragment(var id: Int?) :
+class MovieReviewFragment() :
     BaseFragment<MovieReviewPageState, MovieReviewPageEffect, MovieReviewBinding, MovieReviewPageViewModel>() {
 
-    private val args by navArgs<MovieDetailsFragmentArgs>()
+    private var movieId = ""
+    private lateinit var reviewsAdapter: MovieReviewListAdapter
     override val bindingCallback: (LayoutInflater, ViewGroup?, Boolean) -> MovieReviewBinding
         get() = MovieReviewBinding::inflate
 
@@ -37,14 +39,32 @@ class MovieReviewFragment(var id: Int?) :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+            movieId = it.getString("movieId", "").toString() // Retrieve the movieId from arguments
+        }
         initViews()
+        viewmodel.getMovieReviews(movieId)
+
     }
 
 
     private fun initViews() {
-        with(binding) {
-        }
+        updateReviewList()
+    }
+
+    private fun updateReviewList() {
+        reviewsAdapter = MovieReviewListAdapter(MovieReviewListAdapter.MovieReviewClick {
+
+        })
+        binding.movieReviewAdapter.adapter = reviewsAdapter
     }
 
 
+    override fun observeState(state: MovieReviewPageState) {
+        when (state) {
+            is MovieReviewPageState.GetMovieReviews -> {
+                reviewsAdapter.submitList(state.response.items)
+            }
+        }
+    }
 }

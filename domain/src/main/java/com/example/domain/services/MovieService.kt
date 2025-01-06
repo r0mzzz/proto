@@ -35,7 +35,7 @@ interface MovieService {
     @GET("v2.2/films/{id}/reviews")
     suspend fun getMovieReviews(
         @Path("id") id: String? = null,
-    ): List<MovieReviewModel>
+    ): MovieReviewModel
 
     @GET("v2.2/films/{id}/videos")
     suspend fun getMovieTrailer(

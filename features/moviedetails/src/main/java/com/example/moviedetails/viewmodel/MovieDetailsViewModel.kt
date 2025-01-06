@@ -23,8 +23,8 @@ class MovieDetailsViewModel @Inject constructor(
 
 ) : BaseViewModel<MovieDetailsPageState, MovieDetailsPageEffect>() {
     var movieDetails = MutableLiveData<MovieDetailsModel>(null)
-    var currentMovieId = ""
-    var previousMovieId = ""
+    var currentMovieId = MutableLiveData("")
+    var previousMovieId = MutableLiveData("")
 
     fun getMovieDetail(id: String) {
         getMovieDetailUseCase.launchNoLoading(GetMovieDetailsUseCase.Params(id)) {

@@ -1,6 +1,7 @@
 package com.example.moviedetails.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.example.core.base.BaseFragment
 import com.example.domain.entity.enums.StaffType
+import com.example.domain.entity.models.ViewPagerTabModel
 import com.example.domain.entity.moviedetails.MovieDetailsModel
 import com.example.domain.entity.moviedetails.MovieStuffModel
 import com.example.domain.entity.moviedetails.SimilarMoviesModel
@@ -48,15 +50,17 @@ class MovieDetailsFragment :
         super.onViewCreated(view, savedInstanceState)
         initViews()
         val items = listOf(
-            SimilarMoviesModel(id = args.movieId.toInt(), name = "Similar"),
+            ViewPagerTabModel(id = args.movieId.toInt(), name = "Similar"),
+            ViewPagerTabModel(id = 2, name = "Overviews"),
         )
         loadContent(items)
     }
 
-    private fun loadContent(items: List<SimilarMoviesModel>) {
+    private fun loadContent(items: List<ViewPagerTabModel>) {
         similarViewPagerAdapter =
             ViewPagerAdapter(items, childFragmentManager, lifecycle)
         binding.similarMoviesViewpager.adapter = similarViewPagerAdapter
+        binding.similarMoviesViewpager.isUserInputEnabled = false
 
         binding.similarMoviesViewpager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
@@ -82,13 +86,15 @@ class MovieDetailsFragment :
     private fun initViews() {
         with(binding) {
         }
-        viewmodel.currentMovieId = args.movieId
-        if (viewmodel.currentMovieId !== viewmodel.previousMovieId) {
-            viewmodel.previousMovieId = viewmodel.currentMovieId
-            if (viewmodel.movieDetails.value?.kinopoiskId?.toString() != viewmodel.currentMovieId) {
-                viewmodel.getMovieDetail(args.movieId)
-            } else {
-                updateMovieDetails(viewmodel.movieDetails.value!!)
+
+        viewmodel.currentMovieId.value = args.movieId
+        if (viewmodel.currentMovieId.value != viewmodel.previousMovieId.value) {
+            viewmodel.previousMovieId.value = viewmodel.currentMovieId.value
+            viewmodel.getMovieDetail(args.movieId)
+        } else {
+            viewmodel.movieDetails.value?.let {
+                updateMovieDetails(it)
+            } ?: run {
             }
         }
     }
@@ -163,10 +169,4 @@ class MovieDetailsFragment :
             }
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewmodel.movieDetails.value = null
-    }
-
 }

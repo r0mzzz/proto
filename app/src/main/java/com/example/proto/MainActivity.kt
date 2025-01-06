@@ -55,6 +55,21 @@ class MainActivity : BaseActivity() {
         navController = navHost.navController
         bottomNav = findViewById(R.id.bottomNav)
         setupWithNavController(navigationBarView = bottomNav, navController = navController)
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home_graph -> {
+                    navController.navigate(R.id.home_graph)
+                    return@setOnItemSelectedListener true
+                }
+                R.id.settings_graph -> {
+                    navController.navigate(R.id.settings_graph)
+                    return@setOnItemSelectedListener true
+                }
+                else -> {
+                    return@setOnItemSelectedListener false
+                }
+            }
+        }
         if (savedInstanceState == null) {
             graph = navHost.navController.navInflater.inflate(R.navigation.main_graph)
             val (startGraphId, startGraphArgs) = findStartGraph()

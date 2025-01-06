@@ -18,7 +18,6 @@ fun NavController.navigateWithAnimation(
         .setPopEnterAnim(com.example.uikit.R.anim.enter_from_left)
         .setPopExitAnim(com.example.uikit.R.anim.exit_to_right)
         .build()
-
     navigate(navDirections, navOptions)
 }
 

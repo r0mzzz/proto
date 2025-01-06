@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.core.base.BaseFragment
 import com.example.core.tools.NavigationCommand
+import com.example.domain.decorations.GridItemDecoration
 import com.example.moviedetails.adapter.SimilarMovieListAdapter
 import com.example.moviedetails.databinding.SimilarLayoutBinding
 import com.example.moviedetails.effect.SimilarMoviesPageEffect
@@ -50,7 +51,11 @@ class SimilarMoviesFragment :
     private fun initSimilarMovieList() {
         val layoutManager = object : GridLayoutManager(context, 3) {
             override fun canScrollVertically(): Boolean {
-                return false // Disable vertical scrolling
+                return false
+            }
+
+            override fun canScrollHorizontally(): Boolean {
+                return false
             }
         }
         similarMovieListAdapter =
@@ -65,6 +70,10 @@ class SimilarMoviesFragment :
                     )
                 })
         binding.similarMoviesAdapter.layoutManager = layoutManager
+        val gridDecoration = GridItemDecoration(
+            3, 20, false
+        )
+        binding.similarMoviesAdapter.addItemDecoration(gridDecoration)
         binding.similarMoviesAdapter.adapter = similarMovieListAdapter
     }
 
@@ -72,7 +81,7 @@ class SimilarMoviesFragment :
     override fun observeState(state: SimilarMoviesPageState) {
         when (state) {
             is SimilarMoviesPageState.GetSimilarMovies -> {
-                    similarMovieListAdapter.submitList(state.response.items)
+                similarMovieListAdapter.submitList(state.response.items)
             }
         }
     }

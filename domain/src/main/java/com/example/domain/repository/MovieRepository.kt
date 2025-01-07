@@ -3,10 +3,9 @@ package com.example.domain.repository
 import com.example.domain.entity.enums.MovieType
 import com.example.domain.entity.home.MoviesResponse
 import com.example.domain.entity.moviedetails.MovieDetailsModel
-import com.example.domain.entity.moviedetails.MovieReviewModel
+import com.example.domain.entity.moviedetails.MoviePosterModel
 import com.example.domain.entity.moviedetails.MovieStuffModel
 import com.example.domain.entity.moviedetails.MovieTrailerModel
-import com.example.domain.entity.moviedetails.SimilarMovieModel
 import com.example.domain.entity.moviedetails.SimilarMoviesModel
 
 interface MovieRepository {
@@ -22,5 +21,5 @@ interface MovieRepository {
     suspend fun getMovieTrailer(id: String): MovieTrailerModel
     suspend fun getMovieStuff(id: String): List<MovieStuffModel>
     suspend fun getSimilarMovies(id: String): SimilarMoviesModel
-    suspend fun getMovieReviews(id: String): MovieReviewModel
+    suspend fun getMoviePosters(id: String, type: String, page: String): MoviePosterModel
 }

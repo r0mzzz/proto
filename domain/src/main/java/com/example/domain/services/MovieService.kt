@@ -3,10 +3,9 @@ package com.example.domain.services
 import com.example.domain.entity.enums.MovieType
 import com.example.domain.entity.home.MoviesResponse
 import com.example.domain.entity.moviedetails.MovieDetailsModel
-import com.example.domain.entity.moviedetails.MovieReviewModel
+import com.example.domain.entity.moviedetails.MoviePosterModel
 import com.example.domain.entity.moviedetails.MovieStuffModel
 import com.example.domain.entity.moviedetails.MovieTrailerModel
-import com.example.domain.entity.moviedetails.SimilarMovieModel
 import com.example.domain.entity.moviedetails.SimilarMoviesModel
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -30,12 +29,14 @@ interface MovieService {
     @GET("v2.2/films/{id}/similars")
     suspend fun getSimilarMovies(
         @Path("id") id: String? = null,
-    ):SimilarMoviesModel
+    ): SimilarMoviesModel
 
-    @GET("v2.2/films/{id}/reviews")
-    suspend fun getMovieReviews(
+    @GET("v2.2/films/{id}/images")
+    suspend fun getMoviePosters(
         @Path("id") id: String? = null,
-    ): MovieReviewModel
+        @Query("type") type: String? = null,
+        @Query("page") page: String? = null,
+    ): MoviePosterModel
 
     @GET("v2.2/films/{id}/videos")
     suspend fun getMovieTrailer(

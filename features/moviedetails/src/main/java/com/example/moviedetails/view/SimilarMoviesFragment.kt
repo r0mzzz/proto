@@ -48,6 +48,11 @@ class SimilarMoviesFragment :
         initSimilarMovieList()
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.root.requestLayout()
+    }
+
     private fun initSimilarMovieList() {
         val layoutManager = object : GridLayoutManager(context, 3) {
             override fun canScrollVertically(): Boolean {

@@ -3,10 +3,9 @@ package com.example.domain.repository
 import com.example.domain.entity.enums.MovieType
 import com.example.domain.entity.home.MoviesResponse
 import com.example.domain.entity.moviedetails.MovieDetailsModel
-import com.example.domain.entity.moviedetails.MovieReviewModel
+import com.example.domain.entity.moviedetails.MoviePosterModel
 import com.example.domain.entity.moviedetails.MovieStuffModel
 import com.example.domain.entity.moviedetails.MovieTrailerModel
-import com.example.domain.entity.moviedetails.SimilarMovieModel
 import com.example.domain.entity.moviedetails.SimilarMoviesModel
 import com.example.domain.services.MovieService
 import javax.inject.Inject
@@ -42,8 +41,8 @@ class MovieRepositoryImpl @Inject constructor(
         return movieService.getSimilarMovies(id)
     }
 
-    override suspend fun getMovieReviews(id: String): MovieReviewModel {
-        return movieService.getMovieReviews(id)
+    override suspend fun getMoviePosters(id: String, type: String, page: String): MoviePosterModel {
+        return movieService.getMoviePosters(id, type, page)
     }
 
 }

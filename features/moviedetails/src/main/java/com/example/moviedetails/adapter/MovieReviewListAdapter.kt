@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.core.base.BaseAdapter
-import com.example.domain.entity.moviedetails.Review
+import com.example.domain.entity.moviedetails.Poster
 import com.example.moviedetails.databinding.MovieReviewItemBinding
+import com.example.uikit.extensions.loadImageFromGLideRounded
 
 class MovieReviewListAdapter(
     private val clickListener: MovieReviewClick
-) : BaseAdapter<Review, MovieReviewListAdapter.MovieReviewViewHolder>(
-    areItemsTheSame = { oldItem, newItem -> oldItem.author == newItem.author }) {
+) : BaseAdapter<Poster, MovieReviewListAdapter.MovieReviewViewHolder>(
+    areItemsTheSame = { oldItem, newItem -> oldItem.imageUrl == newItem.imageUrl }) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieReviewViewHolder {
@@ -19,15 +20,15 @@ class MovieReviewListAdapter(
         )
     }
 
-    class MovieReviewClick(val clickListener: (model: Review) -> Unit) {
-        fun onClick(model: Review) = clickListener(model)
+    class MovieReviewClick(val clickListener: (model: Poster) -> Unit) {
+        fun onClick(model: Poster) = clickListener(model)
     }
 
     class MovieReviewViewHolder(private val binding: MovieReviewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(model: Review) {
+        fun bind(model: Poster) {
             binding.apply {
-                reviewerName.text = model.title
+                poster.loadImageFromGLideRounded(model.previewUrl.toString(), 25, null)
             }
         }
     }

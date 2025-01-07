@@ -1,10 +1,12 @@
 package com.example.moviedetails.view
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
@@ -34,6 +36,7 @@ class MovieDetailsFragment :
     BaseFragment<MovieDetailsPageState, MovieDetailsPageEffect, FragmentMovieDetailsBinding, MovieDetailsViewModel>() {
 
     private val args by navArgs<MovieDetailsFragmentArgs>()
+    private var recyclerViewId: Int? = null
     private lateinit var similarViewPagerAdapter: ViewPagerAdapter
 
     override val bindingCallback: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMovieDetailsBinding
@@ -48,10 +51,22 @@ class MovieDetailsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recyclerViewId =
+            arguments?.getInt("recyclerViewId") // Get the RecyclerView ID from arguments
         initViews()
         val items = listOf(
-            ViewPagerTabModel(args.movieId, "Similar"),
-            ViewPagerTabModel(args.movieId, "Overviews"),
+            ViewPagerTabModel(
+                args.movieId,
+                "Похожие",
+                com.example.moviedetails.R.id.similar_movies_adapter,
+                "similar",
+            ),
+            ViewPagerTabModel(
+                args.movieId,
+                "Постеры",
+                com.example.moviedetails.R.id.movie_poster_adapter,
+                "posters",
+            ),
         )
         loadContent(items)
     }

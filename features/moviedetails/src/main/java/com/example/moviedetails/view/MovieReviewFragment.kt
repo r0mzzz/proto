@@ -6,7 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.core.base.BaseFragment
+import com.example.domain.decorations.GridItemDecoration
 import com.example.domain.entity.moviedetails.SimilarMoviesModel
 import com.example.domain.entity.moviedetails.TrailerItems
 import com.example.moviedetails.adapter.MovieReviewListAdapter
@@ -43,7 +46,7 @@ class MovieReviewFragment() :
             movieId = it.getString("movieId", "").toString() // Retrieve the movieId from arguments
         }
         initViews()
-        viewmodel.getMovieReviews(movieId)
+        viewmodel.getMovieReviews(movieId, "FAN_ART", "1")
 
     }
 
@@ -52,11 +55,30 @@ class MovieReviewFragment() :
         updateReviewList()
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.root.requestLayout()
+    }
+
     private fun updateReviewList() {
+        val layoutManager = object : GridLayoutManager(context, 3) {
+            override fun canScrollVertically(): Boolean {
+                return false
+            }
+
+            override fun canScrollHorizontally(): Boolean {
+                return false
+            }
+        }
         reviewsAdapter = MovieReviewListAdapter(MovieReviewListAdapter.MovieReviewClick {
 
         })
-        binding.movieReviewAdapter.adapter = reviewsAdapter
+        binding.moviePosterAdapter.layoutManager = layoutManager
+        val gridDecoration = GridItemDecoration(
+            3, 20, false
+        )
+        binding.moviePosterAdapter.addItemDecoration(gridDecoration)
+        binding.moviePosterAdapter.adapter = reviewsAdapter
     }
 
 

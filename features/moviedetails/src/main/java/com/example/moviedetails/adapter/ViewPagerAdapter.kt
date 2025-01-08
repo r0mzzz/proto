@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.domain.entity.enums.SegmentTabs
 import com.example.domain.entity.models.ViewPagerTabModel
 import com.example.moviedetails.view.SimilarMoviesFragment
 import com.example.moviedetails.view.MovieReviewFragment
@@ -29,45 +30,50 @@ class ViewPagerAdapter(
 
     private fun createDynamicFragment(item: ViewPagerTabModel): Fragment? {
         return when (item.type) {
-            "similar" -> {
+            SegmentTabs.SIMILAR.name -> {
                 val fragment = SimilarMoviesFragment()
                 val bundle = Bundle().apply {
                     item.id?.let { putString("movieId", it) }
-                    item.recyclerViewId?.let { putInt("recyclerViewId", it) } // Pass RecyclerView ID
+                    item.recyclerViewId?.let { putInt("recyclerViewId", it) }
 
                 }
                 fragment.arguments = bundle
-
-                // Ensure the height adjustment occurs after the fragment's view is fully laid out
                 fragment.view?.viewTreeObserver?.addOnPreDrawListener {
-                    // Delay the height adjustment to make sure the layout is done
                     fragment.view?.post {
-                        adjustViewPagerHeight(fragment, item.recyclerViewId) // Adjust height on first load
+                        adjustViewPagerHeight(fragment, item.recyclerViewId)
                     }
-                    true // Return true to allow the drawing process to continue
+                    true
                 }
 
                 fragment
             }
-            "posters" -> {
+
+            SegmentTabs.POSTERS.name -> {
                 val fragment = MovieReviewFragment()
                 val bundle = Bundle().apply {
                     item.id?.let { putString("movieId", it) }
-                    item.recyclerViewId?.let { putInt("recyclerViewId", it) } // Pass RecyclerView ID
+                    item.recyclerViewId?.let {
+                        putInt(
+                            "recyclerViewId",
+                            it
+                        )
+                    }
                 }
                 fragment.arguments = bundle
 
-                // Ensure the height adjustment occurs after the fragment's view is fully laid out
                 fragment.view?.viewTreeObserver?.addOnPreDrawListener {
-                    // Delay the height adjustment to make sure the layout is done
                     fragment.view?.post {
-                        adjustViewPagerHeight(fragment, item.recyclerViewId) // Adjust height on first load
+                        adjustViewPagerHeight(
+                            fragment,
+                            item.recyclerViewId
+                        )
                     }
-                    true // Return true to allow the drawing process to continue
+                    true
                 }
 
                 fragment
             }
+
             else -> null
         }
     }
@@ -75,7 +81,8 @@ class ViewPagerAdapter(
 
     fun adjustViewPagerHeight(fragment: Fragment, recyclerViewId: Int?) {
         recyclerViewId?.let { id ->
-            val recyclerView = fragment.view?.findViewById<RecyclerView>(id) // Use dynamic RecyclerView ID
+            val recyclerView =
+                fragment.view?.findViewById<RecyclerView>(id) // Use dynamic RecyclerView ID
             recyclerView?.let {
                 val params = fragment.view?.layoutParams
                 val height = it.computeVerticalScrollRange()

@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.example.core.base.BaseFragment
+import com.example.domain.entity.enums.SegmentTabs
 import com.example.domain.entity.enums.StaffType
 import com.example.domain.entity.models.ViewPagerTabModel
 import com.example.domain.entity.moviedetails.MovieDetailsModel
@@ -59,14 +60,14 @@ class MovieDetailsFragment :
                 args.movieId,
                 "Похожие",
                 com.example.moviedetails.R.id.similar_movies_adapter,
-                "similar",
+                SegmentTabs.SIMILAR.name,
             ),
             ViewPagerTabModel(
                 args.movieId,
                 "Постеры",
                 com.example.moviedetails.R.id.movie_poster_adapter,
-                "posters",
-            ),
+                SegmentTabs.POSTERS.name,
+                ),
         )
         loadContent(items)
     }

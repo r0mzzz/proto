@@ -1,17 +1,10 @@
 package com.example.moviedetails.view
 
-import android.animation.ValueAnimator
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
-import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.TextView
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
@@ -21,7 +14,6 @@ import com.example.domain.entity.enums.StaffType
 import com.example.domain.entity.models.ViewPagerTabModel
 import com.example.domain.entity.moviedetails.MovieDetailsModel
 import com.example.domain.entity.moviedetails.MovieStuffModel
-import com.example.domain.entity.moviedetails.SimilarMoviesModel
 import com.example.domain.entity.moviedetails.TrailerItems
 import com.example.moviedetails.adapter.ViewPagerAdapter
 import com.example.moviedetails.databinding.FragmentMovieDetailsBinding
@@ -30,6 +22,11 @@ import com.example.moviedetails.state.MovieDetailsPageState
 import com.example.moviedetails.viewmodel.MovieDetailsViewModel
 import com.example.uikit.extensions.gone
 import com.google.android.material.tabs.TabLayoutMediator
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.customui.DefaultPlayerUiController
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -75,8 +72,7 @@ class MovieDetailsFragment :
     }
 
     private fun loadContent(items: List<ViewPagerTabModel>) {
-        similarViewPagerAdapter =
-            ViewPagerAdapter(items, childFragmentManager, lifecycle)
+        similarViewPagerAdapter = ViewPagerAdapter(items, childFragmentManager, lifecycle)
         binding.similarMoviesViewpager.adapter = similarViewPagerAdapter
         binding.similarMoviesViewpager.isUserInputEnabled = false
 
@@ -109,8 +105,7 @@ class MovieDetailsFragment :
         } else {
             viewmodel.movieDetails.value?.let {
                 updateMovieDetails(it)
-            } ?: run {
-            }
+            } ?: run {}
         }
     }
 
@@ -127,14 +122,12 @@ class MovieDetailsFragment :
 
     private fun collectStuff(staff: List<MovieStuffModel>) {
         val actorNames = mutableListOf<String>()
-        staff.filter { it.professionKey == StaffType.ACTOR.name }
-            .take(8)
-            .forEach {
-                actorNames.add(it.nameRu.toString())
-            }
+        staff.filter { it.professionKey == StaffType.ACTOR.name }.take(8).forEach {
+            actorNames.add(it.nameRu.toString())
+        }
         binding.actor.text = actorNames.joinToString(", ")
-        binding.director.text = staff.filter { it.professionKey == StaffType.DIRECTOR.name }
-            .take(1)[0].nameRu
+        binding.director.text =
+            staff.filter { it.professionKey == StaffType.DIRECTOR.name }.take(1)[0].nameRu
 
     }
 
@@ -145,26 +138,44 @@ class MovieDetailsFragment :
         return time
     }
 
+    fun extractVideoId(url: String): String? {
+        val regex = "/v/([^?&/]+)".toRegex()
+        val matchResult = regex.find(url)
+        return matchResult?.groups?.get(1)?.value
+    }
+
     private fun updateVideo(response: List<TrailerItems>?) {
         var videoUrl = ""
-        val webSettings = binding.player.settings
-        webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-        binding.player.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(
-                view: WebView?,
-                request: WebResourceRequest?
-            ): Boolean {
-                return false
-            }
-        }
+
         response?.forEach {
             if (it.site == "YOUTUBE") {
-                videoUrl = it.url.toString() + "?controls=0&modestbranding=0"
+                videoUrl = it.url.toString()
+                Log.i("Video URL", videoUrl)
             }
         }
-        binding.player.loadUrl(videoUrl)
-        binding.player.webChromeClient = WebChromeClient()
+
+        val listener: YouTubePlayerListener = object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                val videoId = extractVideoId(videoUrl)
+                if (videoId != null) {
+                    youTubePlayer.loadVideo(videoId, 0f)
+                    val defaultPlayerUiController = DefaultPlayerUiController(binding.player, youTubePlayer)
+                    defaultPlayerUiController.showVideoTitle(false)
+                    defaultPlayerUiController.showUi(false)
+                    defaultPlayerUiController.showMenuButton(false)
+                    defaultPlayerUiController.showYouTubeButton(false)
+                }
+            }
+        }
+
+        val iFramePlayerOptions = IFramePlayerOptions.Builder().controls(0) // Hide controls
+            .fullscreen(0) // Disable fullscreen option
+            .autoplay(1)
+            .mute(1)
+            .build()
+        binding.player.initialize(listener, iFramePlayerOptions)
     }
+
 
     override fun observeState(state: MovieDetailsPageState) {
         when (state) {
@@ -183,5 +194,10 @@ class MovieDetailsFragment :
                 collectStuff(state.response)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.player.release()
     }
 }

@@ -34,8 +34,6 @@ class ViewPagerAdapter(
                 val fragment = SimilarMoviesFragment()
                 val bundle = Bundle().apply {
                     item.id?.let { putString("movieId", it) }
-                    item.recyclerViewId?.let { putInt("recyclerViewId", it) }
-
                 }
                 fragment.arguments = bundle
                 fragment.view?.viewTreeObserver?.addOnPreDrawListener {
@@ -52,12 +50,6 @@ class ViewPagerAdapter(
                 val fragment = MovieReviewFragment()
                 val bundle = Bundle().apply {
                     item.id?.let { putString("movieId", it) }
-                    item.recyclerViewId?.let {
-                        putInt(
-                            "recyclerViewId",
-                            it
-                        )
-                    }
                 }
                 fragment.arguments = bundle
 

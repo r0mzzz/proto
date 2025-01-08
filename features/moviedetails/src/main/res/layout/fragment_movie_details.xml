@@ -7,6 +7,12 @@
     android:background="@color/black"
     tools:context=".view.MovieDetailsFragment">
 
+    <FrameLayout
+        android:id="@+id/black_screen"
+        android:translationZ="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black" />
 
 
     <com.example.uikit.toolbar.MyToolbar
@@ -20,11 +26,11 @@
 
     <ScrollView
         android:id="@+id/scrollbar"
-        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipChildren="false"
         android:clipToPadding="false"
+        android:overScrollMode="never"
         android:paddingHorizontal="@dimen/_8sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -298,23 +304,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_13sdp"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:tabGravity="center"
                     app:tabIndicatorColor="@color/primary"
                     app:tabIndicatorHeight="2dp"
-                    app:tabRippleColor="@null"
-                    app:tabMode="fixed" />
+                    app:tabMode="fixed"
+                    app:tabRippleColor="@null" />
 
 
                 <androidx.viewpager2.widget.ViewPager2
-                    app:layout_constraintTop_toBottomOf="@id/tabs"
                     android:id="@+id/similar_movies_viewpager"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
                     app:layout_constraintEnd_toEndOf="@+id/tabs"
-                    app:layout_constraintStart_toStartOf="@+id/tabs" />
+                    app:layout_constraintStart_toStartOf="@+id/tabs"
+                    app:layout_constraintTop_toBottomOf="@id/tabs" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

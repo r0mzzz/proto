@@ -28,6 +28,7 @@ import com.example.moviedetails.databinding.FragmentMovieDetailsBinding
 import com.example.moviedetails.effect.MovieDetailsPageEffect
 import com.example.moviedetails.state.MovieDetailsPageState
 import com.example.moviedetails.viewmodel.MovieDetailsViewModel
+import com.example.uikit.extensions.gone
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +38,6 @@ class MovieDetailsFragment :
     BaseFragment<MovieDetailsPageState, MovieDetailsPageEffect, FragmentMovieDetailsBinding, MovieDetailsViewModel>() {
 
     private val args by navArgs<MovieDetailsFragmentArgs>()
-    private var recyclerViewId: Int? = null
     private lateinit var similarViewPagerAdapter: ViewPagerAdapter
 
     override val bindingCallback: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMovieDetailsBinding
@@ -52,9 +52,11 @@ class MovieDetailsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerViewId =
-            arguments?.getInt("recyclerViewId") // Get the RecyclerView ID from arguments
         initViews()
+        buildSegmentTabs()
+    }
+
+    private fun buildSegmentTabs() {
         val items = listOf(
             ViewPagerTabModel(
                 args.movieId,
@@ -67,7 +69,7 @@ class MovieDetailsFragment :
                 "Постеры",
                 com.example.moviedetails.R.id.movie_poster_adapter,
                 SegmentTabs.POSTERS.name,
-                ),
+            ),
         )
         loadContent(items)
     }
@@ -100,9 +102,6 @@ class MovieDetailsFragment :
 
 
     private fun initViews() {
-        with(binding) {
-        }
-
         viewmodel.currentMovieId.value = args.movieId
         if (viewmodel.currentMovieId.value != viewmodel.previousMovieId.value) {
             viewmodel.previousMovieId.value = viewmodel.currentMovieId.value
@@ -122,7 +121,7 @@ class MovieDetailsFragment :
         binding.filmLength.text = convertMinutesToFilmLength(response.filmLength.toString())
         binding.description.text = response.shortDescription
         binding.ageLimit.text = response.ratingAgeLimits?.replace("age", "").plus("+")
-//        binding.blackScreen.gone()
+        binding.blackScreen.gone()
     }
 
 

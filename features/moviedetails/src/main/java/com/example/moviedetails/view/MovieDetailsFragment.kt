@@ -112,10 +112,16 @@ class MovieDetailsFragment :
 
     private fun updateMovieDetails(response: MovieDetailsModel) {
         binding.movieTitle.text = response.nameEn ?: response.nameRu
-        binding.year.text = response.year.toString()
-        binding.filmLength.text = convertMinutesToFilmLength(response.filmLength.toString())
+        if(response.year != null){
+            binding.year.text = response.year.toString()
+        }
         binding.description.text = response.shortDescription
-        binding.ageLimit.text = response.ratingAgeLimits?.replace("age", "").plus("+")
+        if (response.ratingAgeLimits.isNullOrEmpty()) {
+            binding.ageLimit.text = response.ratingAgeLimits?.replace("age", "").plus("+")
+        }
+        if (response.filmLength != null) {
+            binding.filmLength.text = convertMinutesToFilmLength(response.filmLength.toString())
+        }
         binding.blackScreen.gone()
     }
 
@@ -159,7 +165,8 @@ class MovieDetailsFragment :
                 val videoId = extractVideoId(videoUrl)
                 if (videoId != null) {
                     youTubePlayer.loadVideo(videoId, 0f)
-                    val defaultPlayerUiController = DefaultPlayerUiController(binding.player, youTubePlayer)
+                    val defaultPlayerUiController =
+                        DefaultPlayerUiController(binding.player, youTubePlayer)
                     defaultPlayerUiController.showVideoTitle(false)
                     defaultPlayerUiController.showUi(false)
                     defaultPlayerUiController.showMenuButton(false)

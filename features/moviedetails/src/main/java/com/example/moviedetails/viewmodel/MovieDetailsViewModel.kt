@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.core.base.BaseViewModel
 import com.example.domain.database.MyListRepository
+import com.example.domain.database.entity.LikedMovies
 import com.example.domain.database.entity.MyList
 import com.example.domain.entity.moviedetails.MovieDetailsModel
 import com.example.domain.usecase.movies.GetMovieDetailsUseCase
@@ -63,6 +64,12 @@ class MovieDetailsViewModel @Inject constructor(
     fun addItem(item: MyList) {
         viewModelScope.launch(Dispatchers.IO) {
             myListRepository.insertNewData(item)
+        }
+    }
+
+    fun likeMovie(item: LikedMovies) {
+        viewModelScope.launch(Dispatchers.IO) {
+            myListRepository.insertDataToLiked(item)
         }
     }
 }

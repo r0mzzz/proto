@@ -9,6 +9,11 @@
             <enum name="with_left" value="1" />
             <enum name="with_right" value="2" />
             <enum name="without_left_and_right" value="3" />
+            <enum name="with_right_and_secondary" value="4" />
+        </attr>
+        <attr name="logo_option" format="enum">
+            <enum name="yes" value="1" />
+            <enum name="no" value="0" />
         </attr>
         <attr name="android:textStyle" tools:ignore="ResourceName" />
     </declare-styleable>

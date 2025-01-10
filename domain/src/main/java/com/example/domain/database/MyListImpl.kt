@@ -1,5 +1,6 @@
 package com.example.domain.database
 
+import com.example.domain.database.entity.LikedMovies
 import com.example.domain.database.entity.MyList
 import com.example.domain.database.entity.MyListDAO
 import javax.inject.Inject
@@ -12,8 +13,16 @@ class MyListImpl @Inject constructor(
         myListDao.insertToMyList(myListDbEntity)
     }
 
+    override suspend fun insertDataToLiked(myListDbEntity: LikedMovies) {
+        return myListDao.insertToMyLikedList(myListDbEntity)
+    }
+
     override suspend fun getAllList(): List<MyList> {
         return myListDao.getAllList()
+    }
+
+    override suspend fun getAllLiked(): List<LikedMovies> {
+        return myListDao.getAllLikedList()
     }
 
     override suspend fun removeStatisticDataById(id: Long) {

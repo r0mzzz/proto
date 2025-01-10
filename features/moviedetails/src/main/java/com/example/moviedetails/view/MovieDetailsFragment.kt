@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.example.core.base.BaseFragment
+import com.example.domain.database.entity.LikedMovies
 import com.example.domain.database.entity.MyList
 import com.example.domain.entity.enums.SegmentTabs
 import com.example.domain.entity.enums.StaffType
@@ -106,9 +107,18 @@ class MovieDetailsFragment :
         } else {
             viewmodel.movieDetails.value?.let {
                 updateMovieDetails(it)
-            } ?: run {}
+            }
         }
         with(binding) {
+            rateContainer.setOnClickListener {
+                viewmodel.likeMovie(
+                    LikedMovies(
+                        id = viewmodel.currentMovieId.value!!.toInt(),
+                        movieTitle = viewmodel.movieDetails.value?.nameOriginal.toString(),
+                        moviePoster = viewmodel.movieDetails.value?.posterUrl.toString()
+                    )
+                )
+            }
             listBtn.setOnClickListener {
                 viewmodel.addItem(
                     MyList(

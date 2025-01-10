@@ -17,9 +17,9 @@ class MarginItemDecoration(
     ) {
         with(outRect) {
             if (orientation == GridLayoutManager.VERTICAL) {
-                if (parent.getChildAdapterPosition(view) < spanCount) {
-                    top = spaceSize
-                }
+//                if (parent.getChildAdapterPosition(view) < spanCount) {
+//                    top = spaceSize
+//                }
                 if (parent.getChildAdapterPosition(view) % spanCount == 0) {
                     left = spaceSize
                 }

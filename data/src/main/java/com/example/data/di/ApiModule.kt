@@ -9,7 +9,7 @@ import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class) // Singleton scope
+@InstallIn(SingletonComponent::class)
 class ApiModule {
 
     @Singleton

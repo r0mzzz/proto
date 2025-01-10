@@ -14,14 +14,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.palette.graphics.Palette
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.core.base.BaseFragment
 import com.example.core.tools.NavigationCommand
-import com.example.domain.decorations.GridItemDecoration
+import com.example.core.utils.RecyclerViewUtils
 import com.example.domain.decorations.MarginItemDecoration
 import com.example.domain.entity.enums.MovieType
 import com.example.domain.entity.home.Genre
@@ -53,10 +52,10 @@ class HomePageFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        updateMovieOfTheDay(viewmodel.movieList.value?.get(10) ?: MovieModel())
+        updateMovieOfTheDay(viewmodel.movieList.value?.get(3) ?: MovieModel())
         if (viewmodel.movieList.value == null) {
             viewmodel.getMovies(MovieType.FILM, "1994", "1994", "8", "10")
-            viewmodel.movieList.value?.get(10)?.let { it1 -> updateMovieOfTheDay(it1) }
+            viewmodel.movieList.value?.get(3)?.let { it1 -> updateMovieOfTheDay(it1) }
         } else {
             movieListAdapter.submitList(viewmodel.movieList.value)
         }
@@ -133,11 +132,7 @@ class HomePageFragment :
     }
 
     private fun initMovieListAdapter() {
-        val layoutManager = object : LinearLayoutManager(context, HORIZONTAL, false) {
-            override fun canScrollVertically(): Boolean {
-                return false // Disable vertical scrolling
-            }
-        }
+        val layoutManager = RecyclerViewUtils.layoutWithDisabledVerticalScroll(requireContext())
         movieListAdapter =
             MovieListAdapter(
                 MovieListAdapter.MovieItemClick {
@@ -156,12 +151,7 @@ class HomePageFragment :
     }
 
     private fun initNewMovieListAdapter() {
-
-        val layoutManager = object : LinearLayoutManager(context, HORIZONTAL, false) {
-            override fun canScrollVertically(): Boolean {
-                return false // Disable vertical scrolling
-            }
-        }
+        val layoutManager = RecyclerViewUtils.layoutWithDisabledVerticalScroll(requireContext())
         newMoviesListAdapter =
             MovieListAdapter(
                 MovieListAdapter.MovieItemClick {
@@ -219,15 +209,7 @@ class HomePageFragment :
                 }
             })
 
-        val layoutManager = object : LinearLayoutManager(context, HORIZONTAL, false) {
-            override fun canScrollVertically(): Boolean {
-                return false
-            }
-
-            override fun canScrollHorizontally(): Boolean {
-                return false
-            }
-        }
+        val layoutManager = RecyclerViewUtils.layoutWithScrollDisabled(requireContext())
 
         val genres = movie.genres?.map { Genre(it.genre) }?.take(3) ?: emptyList()
         val adapter = GenreAdapter(genres)
@@ -282,17 +264,21 @@ class HomePageFragment :
 
             is HomePageState.GetMoviesList -> {
                 state.response.items?.let {
-                    viewmodel.movieList.value = state.response.items
-                    movieListAdapter.submitList(it)
-                    viewmodel.movieList.value?.get(10)?.let { it1 -> updateMovieOfTheDay(it1) }
+                    if (it != movieListAdapter.currentList) {
+                        viewmodel.movieList.value = state.response.items
+                        movieListAdapter.submitList(it)
+                        viewmodel.movieList.value?.get(3)?.let { it1 -> updateMovieOfTheDay(it1) }
+                    }
                 }
 
             }
 
             is HomePageState.GetNewMoviesList -> {
                 state.response.items?.let {
-                    viewmodel.newMovieList.value = state.response.items
-                    newMoviesListAdapter.submitList(it)
+                    if (it != newMoviesListAdapter.currentList) {
+                        viewmodel.newMovieList.value = state.response.items
+                        newMoviesListAdapter.submitList(it)
+                    }
                 }
             }
         }

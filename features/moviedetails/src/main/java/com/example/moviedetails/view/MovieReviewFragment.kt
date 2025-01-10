@@ -1,26 +1,17 @@
 package com.example.moviedetails.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.core.base.BaseFragment
 import com.example.domain.decorations.GridItemDecoration
-import com.example.domain.entity.moviedetails.SimilarMoviesModel
-import com.example.domain.entity.moviedetails.TrailerItems
 import com.example.moviedetails.adapter.MovieReviewListAdapter
 import com.example.moviedetails.databinding.MovieReviewBinding
-import com.example.moviedetails.databinding.SimilarLayoutBinding
 import com.example.moviedetails.effect.MovieReviewPageEffect
-import com.example.moviedetails.effect.SimilarMoviesPageEffect
 import com.example.moviedetails.state.MovieReviewPageState
-import com.example.moviedetails.state.SimilarMoviesPageState
 import com.example.moviedetails.viewmodel.MovieReviewPageViewModel
-import com.example.moviedetails.viewmodel.SimilarMoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 

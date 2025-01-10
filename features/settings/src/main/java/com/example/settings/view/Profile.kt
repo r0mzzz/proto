@@ -1,17 +1,16 @@
 package com.example.settings.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.adapter.LikedMovieListAdapter
 import com.example.adapter.MyMovieListAdapter
 import com.example.core.base.BaseFragment
 import com.example.core.tools.NavigationCommand
+import com.example.core.utils.RecyclerViewUtils
 import com.example.domain.decorations.MarginItemDecoration
 import com.example.settings.databinding.FragmentProfileBinding
 import com.example.settings.effect.ProfileEffect
@@ -30,7 +29,6 @@ class Profile :
     override fun getViewModelClass(): Class<ProfileViewModel> =
         ProfileViewModel::class.java
 
-    var hasFetched = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,13 +43,16 @@ class Profile :
     }
 
     private fun initViews() {
-        initMyListAdapter()
-        initLikedAdapter()
+        if (!::movieListAdapter.isInitialized) {
+            initMyListAdapter()
+        }
+        if (!::likedMovieListAdapter.isInitialized) {
+            initLikedAdapter()
+        }
         with(binding) {
             toolbar.setToolbarRightIcon(com.example.uikit.R.drawable.menu_burger)
             toolbar.setToolbarSecondaryRightIcon(com.example.uikit.R.drawable.ic_search_white)
             toolbar.setToolBarRightActionClick {
-                Toast.makeText(requireContext(), "sdfdsfdsf", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -109,11 +110,7 @@ class Profile :
     }
 
     private fun initMyListAdapter() {
-        val layoutManager = object : LinearLayoutManager(context, HORIZONTAL, false) {
-            override fun canScrollVertically(): Boolean {
-                return false // Disable vertical scrolling
-            }
-        }
+        val layoutManager = RecyclerViewUtils.layoutWithDisabledVerticalScroll(requireContext())
         movieListAdapter = MyMovieListAdapter(MyMovieListAdapter.MovieItemClick {
             viewmodel.navigate(
                 NavigationCommand.Deeplink(

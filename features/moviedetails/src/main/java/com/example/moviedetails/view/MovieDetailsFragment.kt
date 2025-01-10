@@ -209,10 +209,14 @@ class MovieDetailsFragment :
     override fun observeState(state: MovieDetailsPageState) {
         when (state) {
             is MovieDetailsPageState.GetMovieDetailSuccess -> {
-                viewmodel.movieDetails.value = state.response
-                viewmodel.getMovieStuff(state.response.kinopoiskId.toString())
-                viewmodel.getMovieTrailer(state.response.kinopoiskId.toString())
-                updateMovieDetails(state.response)
+                state.response.let {
+                    if (it != viewmodel.movieDetails.value) {
+                        viewmodel.movieDetails.value = state.response
+                        viewmodel.getMovieStuff(state.response.kinopoiskId.toString())
+                        viewmodel.getMovieTrailer(state.response.kinopoiskId.toString())
+                        updateMovieDetails(state.response)
+                    }
+                }
             }
 
             is MovieDetailsPageState.GetMovieTrailerSuccess -> {

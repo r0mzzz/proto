@@ -35,5 +35,4 @@ class ProfileViewModel @Inject constructor(
             likedList.postValue(liked)
         }
     }
-
 }

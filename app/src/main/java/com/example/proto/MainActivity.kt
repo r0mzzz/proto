@@ -39,8 +39,7 @@ class MainActivity : BaseActivity() {
         window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        );
-        changeSystemBottomBarColor()
+        )
         super.onCreate(savedInstanceState)
         mainBinding = FragmentMainActivityBinding.inflate(LayoutInflater.from(this)).also {
             setContentView(it.root)
@@ -48,10 +47,6 @@ class MainActivity : BaseActivity() {
         setStartGraph(savedInstanceState)
     }
 
-    private fun changeSystemBottomBarColor() {
-        window.setNavigationBarColor(SurfaceColors.SURFACE_2.getColor(this));
-
-    }
 
     private fun setStartGraph(savedInstanceState: Bundle?) {
         navHost =

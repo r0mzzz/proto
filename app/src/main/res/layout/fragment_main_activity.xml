@@ -22,6 +22,7 @@
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        app:itemBackground="@color/dark_charcoal"
         android:layout_alignParentBottom="true"
         android:layoutAnimation="@null"
         android:paddingBottom="23sp"

@@ -21,6 +21,8 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.core.base.BaseFragment
 import com.example.core.tools.NavigationCommand
+import com.example.domain.decorations.GridItemDecoration
+import com.example.domain.decorations.MarginItemDecoration
 import com.example.domain.entity.enums.MovieType
 import com.example.domain.entity.home.Genre
 import com.example.domain.entity.home.MovieModel
@@ -147,7 +149,9 @@ class HomePageFragment :
                         )
                     )
                 })
+        val itemDecoration = MarginItemDecoration(15, 1)
         binding.movieListAdapter.layoutManager = layoutManager
+        binding.movieListAdapter.addItemDecoration(itemDecoration)
         binding.movieListAdapter.adapter = movieListAdapter
     }
 
@@ -169,7 +173,9 @@ class HomePageFragment :
                         )
                     )
                 })
+        val itemDecoration = MarginItemDecoration(15, 1)
         binding.newListAdapter.layoutManager = layoutManager
+        binding.newListAdapter.addItemDecoration(itemDecoration)
         binding.newListAdapter.adapter = newMoviesListAdapter
     }
 

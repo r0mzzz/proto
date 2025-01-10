@@ -1,17 +1,17 @@
-package com.example.home.adapter
+package com.example.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.core.base.BaseAdapter
-import com.example.domain.entity.home.MovieModel
-import com.example.home.databinding.MovieItemBinding
+import com.example.domain.database.entity.MyList
+import com.example.settings.databinding.MovieItemBinding
 import com.example.uikit.extensions.loadImageFromGLideRounded
 
-class MovieListAdapter(
+class MyMovieListAdapter(
     private val clickListener: MovieItemClick
-) : BaseAdapter<MovieModel, MovieListAdapter.MovieListViewHolder>(
-    areItemsTheSame = { oldItem, newItem -> oldItem.nameOriginal == newItem.nameOriginal }) {
+) : BaseAdapter<MyList, MyMovieListAdapter.MovieListViewHolder>(
+    areItemsTheSame = { oldItem, newItem -> oldItem.movieTitle == newItem.movieTitle }) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieListViewHolder {
@@ -20,15 +20,15 @@ class MovieListAdapter(
         )
     }
 
-    class MovieItemClick(val clickListener: (model: MovieModel) -> Unit) {
-        fun onClick(model: MovieModel) = clickListener(model)
+    class MovieItemClick(val clickListener: (model: MyList) -> Unit) {
+        fun onClick(model: MyList) = clickListener(model)
     }
 
     class MovieListViewHolder(private val binding: MovieItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(model: MovieModel) {
+        fun bind(model: MyList) {
             binding.apply {
-                model.posterUrlPreview?.let { binding.poster.loadImageFromGLideRounded(it, 24) }
+                model.moviePoster.let { binding.poster.loadImageFromGLideRounded(it, 24) }
             }
         }
     }

@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.example.core.base.BaseFragment
+import com.example.domain.database.entity.MyList
 import com.example.domain.entity.enums.SegmentTabs
 import com.example.domain.entity.enums.StaffType
 import com.example.domain.entity.models.ViewPagerTabModel
@@ -92,7 +94,6 @@ class MovieDetailsFragment :
             binding.tabs.getTabAt(i)?.customView = headerTab
             headerTab.findViewById<TextView>(com.example.moviedetails.R.id.tab_title).text =
                 items[i].name
-
         }
     }
 
@@ -107,12 +108,23 @@ class MovieDetailsFragment :
                 updateMovieDetails(it)
             } ?: run {}
         }
+        with(binding) {
+            listBtn.setOnClickListener {
+                viewmodel.addItem(
+                    MyList(
+                        id = viewmodel.currentMovieId.value!!.toInt(),
+                        movieTitle = viewmodel.movieDetails.value?.nameOriginal.toString(),
+                        moviePoster = viewmodel.movieDetails.value?.posterUrl.toString()
+                    )
+                )
+            }
+        }
     }
 
 
     private fun updateMovieDetails(response: MovieDetailsModel) {
         binding.movieTitle.text = response.nameEn ?: response.nameRu
-        if(response.year != null){
+        if (response.year != null) {
             binding.year.text = response.year.toString()
         }
         binding.description.text = response.shortDescription

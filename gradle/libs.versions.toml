@@ -24,6 +24,7 @@ hiltAndroid = "2.44"
 glide = "4.16.0"
 animationAndroid = "1.6.6"
 paletteKtx = "1.0.0"
+roomKtx = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,6 +57,7 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 androidx-animation-android = { group = "androidx.compose.animation", name = "animation-android", version.ref = "animationAndroid" }
 androidx-palette-ktx = { group = "androidx.palette", name = "palette-ktx", version.ref = "paletteKtx" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

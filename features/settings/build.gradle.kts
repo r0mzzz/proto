@@ -1,6 +1,8 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
 }
 
 android {
@@ -40,9 +42,12 @@ dependencies {
     implementation(libs.material)
     implementation(project(":core"))
     implementation(project(":uikit"))
+    implementation(project(":domain"))
     implementation(libs.androidx.navigation.fragment.ktx)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-compiler:2.47")
     implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.hilt.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

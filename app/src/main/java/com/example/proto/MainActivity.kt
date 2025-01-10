@@ -15,6 +15,8 @@ import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.core.base.BaseActivity
 import com.example.proto.databinding.FragmentMainActivityBinding
 import com.example.proto.viewmodel.MainViewModel
+import com.example.uikit.extensions.gone
+import com.example.uikit.extensions.show
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.elevation.SurfaceColors
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +30,9 @@ class MainActivity : BaseActivity() {
     private lateinit var navController: NavController
     private lateinit var graph: NavGraph
     private lateinit var bottomNav: BottomNavigationView
+    private val hiddenBottomNavigationViews by lazy {
+        setOf(com.example.settings.R.id.settingsFragment)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -43,7 +48,7 @@ class MainActivity : BaseActivity() {
         setStartGraph(savedInstanceState)
     }
 
-    private fun changeSystemBottomBarColor(){
+    private fun changeSystemBottomBarColor() {
         window.setNavigationBarColor(SurfaceColors.SURFACE_2.getColor(this));
 
     }
@@ -61,14 +66,22 @@ class MainActivity : BaseActivity() {
                     navController.navigate(R.id.home_graph)
                     return@setOnItemSelectedListener true
                 }
+
                 R.id.settings_graph -> {
                     navController.navigate(R.id.settings_graph)
                     return@setOnItemSelectedListener true
                 }
+
                 else -> {
                     return@setOnItemSelectedListener false
                 }
             }
+        }
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.id !in hiddenBottomNavigationViews)
+                mainBinding.bottomNav.show()
+            else
+                mainBinding.bottomNav.gone()
         }
         if (savedInstanceState == null) {
             graph = navHost.navController.navInflater.inflate(R.navigation.main_graph)

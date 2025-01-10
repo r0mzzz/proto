@@ -22,6 +22,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        kapt {
+            arguments {arg("room.schemaLocation", "$projectDir/schemas")}
+        }
     }
 
     buildTypes {
@@ -53,6 +56,10 @@ android {
 
 dependencies {
     val appcompat_version = "1.7.0"
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-runtime:2.4.0")
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.common.ktx)

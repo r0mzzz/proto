@@ -72,7 +72,6 @@ class Profile :
                 binding.likedMovieListAdapter.show()
             } else {
                 binding.likedMovieListAdapter.gone()
-                Log.i("MovieDetails", "The list is empty.")
             }
         })
     }
@@ -84,7 +83,6 @@ class Profile :
                 binding.myMovieListAdapter.show()
             } else {
                 binding.myMovieListAdapter.gone()
-                Log.i("MovieDetails", "The list is empty.")
             }
         })
     }
